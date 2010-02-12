@@ -1,0 +1,34 @@
+<assembly>
+	<id>dist</id>
+	<baseDirectory>${pom.artifactId}-${pom.version}</baseDirectory>
+	<formats>
+		<format>tar.gz</format>
+	</formats>
+	<fileSets>
+		<fileSet>
+			<directory>${basedir}/src/main/scripts</directory>
+			<outputDirectory>/bin</outputDirectory>
+			<fileMode>711</fileMode>
+			<includes>
+				<include>**/*.sh</include>
+				<include>**/*.pl</include>
+				<include>**/*.rb</include>
+			</includes>
+			<filtered>true</filtered>
+		</fileSet>
+		<fileSet>
+			<directory>${basedir}/src/main/resources/</directory>
+			<outputDirectory>/conf</outputDirectory>
+			<includes>
+				<include>**/*.xml</include>
+			</includes>
+		</fileSet>
+	</fileSets>	
+	<binaries>
+		<dependencySets>
+			<dependencySet>
+				<outputDirectory>/lib</outputDirectory>
+			</dependencySet>
+		</dependencySets>
+	</binaries>
+</assembly>

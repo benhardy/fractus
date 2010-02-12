@@ -122,6 +122,7 @@ object Rule {
     }
   }
   def builder:RuleBuilder = new RuleBuilderImpl
+  def rule = builder
   def weight(w:Double):RuleBuilder = builder weight w
   def color(c:Color):RuleBuilder = builder color c
   def transform(t:Transform):RuleBuilder = builder transform t

@@ -23,27 +23,27 @@ object RuleMap extends (String=>Option[RuleSet]) {
 
   val items:Map[String,RuleSet] = Map(
     "sierpinski" -> Array[Rule](
-      weight(1) color(RED)   also { _ * 0.5 + ( 1.0,  0.0) },
-      weight(1) color(GREEN) also { _ * 0.5 + (-1.0, -1.0) },
-      weight(1) color(BLUE)  also { _ * 0.5 + (-1.0,  1.0) }
+      rule weight 1 color RED   also { _ * 0.5 + ( 1.0,  0.0) },
+      rule weight 1 color GREEN also { _ * 0.5 + (-1.0, -1.0) },
+      rule weight 1 color BLUE  also { _ * 0.5 + (-1.0,  1.0) }
     ),
     "spirally" -> Array[Rule](
-      weight(30) color(WHITE) colorWeight(0.05) scale(0.99) rotate(70),
-      weight(1)  color(BLUE)  colorWeight(0.50) scale(0.1) translate(2,0)
+      rule weight 30  color WHITE colorWeight 0.05 scale 0.99 rotate 70,
+      rule weight 1.0 color BLUE  colorWeight 0.50 scale 0.10 translate(2,0)
     ),
     "spirally2" -> Array[Rule](
-      weight(50) color(CREAM) colorWeight(0.02) scale(0.99) rotate(70),
-      weight(1)  color(RED)  colorWeight(0.90) scale(0.1) translate(5,0),
-      weight(1)  color(WHITE)  colorWeight(0.90) scale(0.1) translate(-5,0)
+      rule weight 50  color CREAM colorWeight 0.02 scale 0.99 rotate 70,
+      rule weight 1   color RED   colorWeight 0.90 scale 0.10 translate(5,0),
+      rule weight 1   color WHITE colorWeight 0.90 scale 0.10 translate(-5,0)
     ),
     "sinx" -> Array[Rule](
-      weight(1).color(WHITE).colorWeight(0.5).scale(8).sine.scale(1.0).translate(-0.5,0.0),
-      weight(1).color(BLACK).colorWeight(1).scale(5).sine.scale(0.333).translate(-0.5,0.0),
-      weight(1).color(BURGUNDY).colorWeight(0.5).polar
+      rule.weight(1). color(WHITE).    colorWeight(0.5).scale(8.0).sine.scale(1.000) translate(-0.5,0.0),
+      rule.weight(1).color(BLACK).    colorWeight(1.0).scale(5.0).sine.scale(0.333) translate(-0.5,0.0),
+      rule weight 1 color BURGUNDY colorWeight 0.5 polar
     ),
     "pinkfur" -> Array[Rule](
-      weight(20).color(WHITE).colorWeight(0.1).scale(0.8).rotate(72).translate(-0.5,0),
-      weight(20 ).color(BURGUNDY).colorWeight(0.5).polar
+      rule weight 1 color WHITE    colorWeight 0.1 scale 0.8 rotate 72 translate(-0.5,0),
+      rule weight 1 color BURGUNDY colorWeight 0.5 polar
     ),
     "pinkfur2" -> Array[Rule](
       weight(1)  .color(BLUE).colorWeight(0.5).scale(0.25).translate(3,0).rotate(36),
