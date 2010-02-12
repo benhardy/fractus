@@ -1,0 +1,7 @@
+target
+*.png
+*.jpg
+*.iml
+.classpath
+.project
+bin
