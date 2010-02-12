@@ -46,6 +46,9 @@ class PolarVector(radius:Double, angle:Double) {
   def spin(dt:Double) = new PolarVector(r, t + dt)
   def length = r
 }
+object PolarVector {
+  def apply(r:Double,t:Double) = new PolarVector(r,t)
+}
 
 class Vector3(a:Double,b:Double,c:Double) extends Vector[Vector3] {
   def x = a
@@ -73,7 +76,7 @@ object Vector {
     PolarVector(c.length, Math.atan2(c.y, c.x))
   }
   implicit def polarToCartesian(p:PolarVector) = {
-    Vector2(p.r * cos(p.t), p.r * sin(p.t))
+    Vector(p.r * cos(p.t), p.r * sin(p.t))
   }
   implicit def tupleToPolar(t:(Double,Double)) = polar(t._1, t._2)
 }

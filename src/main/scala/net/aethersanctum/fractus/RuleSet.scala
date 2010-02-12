@@ -28,7 +28,7 @@ trait RuleSet {
 }
 
 class RuleSetFinder {
-  def find(name:String) = {
+  def find(name:String): RuleSet = {
     RuleMap(name) match {
       case Some(v) => v
       case _ => throw new IllegalArgumentException

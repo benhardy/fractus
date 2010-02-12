@@ -1,12 +1,5 @@
 package net.aethersanctum.fractus;
 
-/**
- * Created by IntelliJ IDEA.
- * User: ben
- * Date: Dec 24, 2009
- * Time: 5:03:23 PM
- * To change this template use File | Settings | File Templates.
- */
 public class FractusMain {
 
     private final static int DEFAULT_IMAGE_WIDTH = 1000;

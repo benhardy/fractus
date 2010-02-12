@@ -119,7 +119,7 @@ object RuleMap extends (String=>Option[RuleSet]) {
         ),
     "polar1" -> Array[Rule](
           weight(1).color(GREEN).colorWeight(0.5).polar.scale(-0.5,0.25).translate(2,2),
-          weight(4).color(GREEN).colorWeight(0.5)..also( _ + (0,-1) )
+          weight(4).color(GREEN).colorWeight(0.5).also( _ + (0,-1) )
         ),
     "starkle" ->  new RuleSet() {
 
