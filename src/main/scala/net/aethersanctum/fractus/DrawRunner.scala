@@ -77,6 +77,10 @@ class DrawRunner(graphics:Graphics, rules:RuleSet, width:Int, height:Int)
     1 + 4 / (hits+1)
   }
 
+  private var keepGoing = true
+
+  def stop = { keepGoing = false }
+
 	override def run() = {
 		System.out.println("DrawRunner is running");
 		var pos = Vector(0.0, 0.0)
@@ -85,7 +89,7 @@ class DrawRunner(graphics:Graphics, rules:RuleSet, width:Int, height:Int)
 		
     var rule = rules.getRules(0)
 
-		while(true) {
+		while(keepGoing) {
 			color = colorMerge( color, rule.color, rule.colorWeight );
 			pos = rule.transform( pos );
       rule = rules.next
@@ -140,10 +144,11 @@ class DrawRunner(graphics:Graphics, rules:RuleSet, width:Int, height:Int)
       }
 
 		}
+    println("DrawRunner got a stop signal")
   }
 
   def getPixelCount = pixelCount
-
+  def black = (0.0,0.0,0.0)
 
   private def updatePoint(xi:Int, yi:Int, color:Color, intensity:Double) {
 		if (xi>=0 && yi>=0 && xi<width && yi<height) {
@@ -156,7 +161,7 @@ class DrawRunner(graphics:Graphics, rules:RuleSet, width:Int, height:Int)
 				colorVector * (255.0/highest)
 			}
 			else if (colorVector.min < 0) {
-				(0,0,0)
+				black
 			}
       else {
         colorVector // it's all good!

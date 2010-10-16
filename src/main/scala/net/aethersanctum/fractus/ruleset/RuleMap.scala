@@ -64,13 +64,13 @@ object RuleMap extends (String=>Option[RuleSet]) {
       weight(0.15).color(BLUE).colorWeight(0.3).also( _ + (2.0, 1.0) ),
       weight(1).color(WHITE).colorWeight(0.07).also(
         (in:Vector2) => {
-					val x = in.x
-					val y = in.y
-					var r = sqrt(x*x + y*y)
-					var t = atan2(x, -y)
+          val x = in.x
+          val y = in.y
+          var r = sqrt(x*x + y*y)
+          var t = atan2(x, -y)
           r = 0.80 *r + 0.15;
           t = t + Pi/4;
-					Vector(r*cos(t), r*sin(t) + 1)
+          Vector(r*cos(t), r*sin(t) + 1)
         }
       )
     ),
@@ -80,12 +80,12 @@ object RuleMap extends (String=>Option[RuleSet]) {
       weight(1).color(WHITE).colorWeight(0.07).also(
         (in:Vector2) => {
           //  (_ * (1.0,-1)).polar( _ * (0.8, 1.0) + (0.15,0) ) + (0.0, 1.0)
-					val (x,y) = (in.x, -in.y)
-					var r = sqrt(x*x + y*y)  // go into polar space
-					var t = atan2(x, y)
+          val (x,y) = (in.x, -in.y)
+          var r = sqrt(x*x + y*y)  // go into polar space
+          var t = atan2(x, y)
           r = 0.80 *r + 0.15;
           t = t + Pi/4;
-					Vector(r*cos(t), r*sin(t) + 1) // back to cartesian space
+          Vector(r*cos(t), r*sin(t) + 1) // back to cartesian space
         }
       ),
       weight(0.01).color(RED).colorWeight(0.7).scale(0.05)
@@ -95,12 +95,12 @@ object RuleMap extends (String=>Option[RuleSet]) {
       weight(0.15).color(BLUE).colorWeight(0.3).also( _ + (2.0, 1.0) ),
       weight(1).color(WHITE).colorWeight(0.07).also(
         (in:Vector2) => {
-					val (x,y) = (in.x, in.y)
+          val (x,y) = (in.x, in.y)
           var r = sqrt(x*x + y*y)
-					var t = atan2(x, y)
+          var t = atan2(x, y)
           r = 0.80 *r + 0.15;
           t = t + Pi/4;
-					Vector(r*cos(t), r*sin(t))
+          Vector(r*cos(t), r*sin(t))
         }
       )
     ),
@@ -108,18 +108,18 @@ object RuleMap extends (String=>Option[RuleSet]) {
           weight(1).color(WHITE).colorWeight(0.70).invertRadius.scale(2.0,1).translate(1,2.5),
           weight(2).color(RED).colorWeight(0.10).also( _ * (0.5,1.0) + (-1.0,0.0)),
           weight(1).color(GREEN).colorWeight(0.5).polar.scale(-0.5,0.25).translate(2,2),
-          weight(4).color(GREEN).colorWeight(0).also( _ + (0,-1) )
+          weight(4).color(GREEN).colorWeight(0).also( _ + Vector(0,-1) )
         ),
     "eggs_mirror" -> Array[Rule](
           weight(30).color(WHITE).colorWeight(0).scale(-1,1),
           weight(1).color(WHITE).colorWeight(0.70).invertRadius.scale(2.0,1).translate(1,2.5),
           weight(2).color(RED).colorWeight(0.10).also( _ * (0.5,1.0) + (-1.0,0.0)),
           weight(1).color(GREEN).colorWeight(0.5).polar.scale(-0.5,0.25).translate(2,2),
-          weight(4).color(GREEN).colorWeight(0).also( _ + (0,-1) )
+          weight(4).color(GREEN).colorWeight(0).also( _ + Vector(0,-1) )
         ),
     "polar1" -> Array[Rule](
           weight(1).color(GREEN).colorWeight(0.5).polar.scale(-0.5,0.25).translate(2,2),
-          weight(4).color(GREEN).colorWeight(0.5).also( _ + (0,-1) )
+          weight(4).color(GREEN).colorWeight(0.5).also( _ + Vector(0,-1) )
         ),
     "starkle" ->  new RuleSet() {
 

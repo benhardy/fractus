@@ -31,7 +31,7 @@ class RuleSetFinder {
   def find(name:String): RuleSet = {
     RuleMap(name) match {
       case Some(v) => v
-      case _ => throw new IllegalArgumentException
+      case _ => throw new IllegalArgumentException("couldn't find a rule by the name of "+name)
     }
 
   }
