@@ -9,6 +9,7 @@ import java.awt.Color._
 import Math._
 import java.awt.event._
 import java.awt._
+import collection.mutable.BitSet
 
 case class Complex(val real:Double, val imag:Double) {
   def +(other:Complex) = Complex(real + other.real, imag + other.imag)
@@ -288,12 +289,12 @@ object Palette {
     val col = randomColor
     i & 3 match {
       case 0 => col
-      case 1 => col.darker
-      case 2 => col.brighter
+      case 1 => col.darker.darker.darker
+      case 2 => colorSpread(col, white, 0.7)
       case 3 => {
         val avg = (col.getRed + col.getGreen + col.getBlue) /3
         val cAvg = new Color(avg,avg,avg)
-        colorSpread(col, cAvg, 0.75)
+        colorSpread(col, cAvg, 0.8)
       }
     }
   } toArray
@@ -319,6 +320,29 @@ class MandelbrotRender(graphics:Graphics, width:Int, height: Int,
 
   println("new Mandelbrot view="+view)
   val aspect = height.toDouble /width
+
+  class PixelFlags {
+    private val markers = new Array[BitSet](height)
+    for (y <- 0 until height) {
+      markers(y)= new BitSet
+    }
+
+    def mark(x:Int, y:Int) = markers(y) += x
+    def unmark(x:Int, y:Int) = markers(y) -= x
+    def apply(x:Int, y:Int) = markers(y).contains(x)
+    def clear = markers.foreach{ _.clear }
+  }
+  val calculated = new PixelFlags
+  val insideSet = new PixelFlags
+
+  /**
+   *   Return how many trailing binary 0s a number has.
+   * @param x: the number we want to find out about
+   * @param acc: an internal accumulator. do not use.
+   */
+  @tailrec def majorness(x:Int, acc:Int=0):Int = {
+    if (x==0 || (x&1)==1) acc else majorness(x>>1, acc+1)
+  }
 
     case class Bailout(val iterations:Option[Int], val location:Complex, val last:Complex)
 
@@ -352,9 +376,15 @@ class MandelbrotRender(graphics:Graphics, width:Int, height: Int,
 
   def run = {
     val TOP_POWER = 7
+    markers.clear
     TOP_POWER to 0 by -1 foreach {
       power =>
         val blockSize = 1 << power
+        val blockMask = -1 << power
+        val parentBlockMask = blockMask << 1
+
+        def parentLocation(x:Int, y:Int) = (x & parentBlockMask, y & parentBlockMask)
+
         0 until height by blockSize foreach {
           yp =>
             val yf = view.center.imag + view.scale * aspect * (yp.toDouble / height - 0.5)
@@ -365,33 +395,26 @@ class MandelbrotRender(graphics:Graphics, width:Int, height: Int,
               xp =>
                 if (forgetIt)
                   throw new InterruptedException
+                // figure out if we can avoid calculating this spot.
+                val parent = parentLocation(px, py)
+                val skip = if (insideSet(parent)) {
+                  // let's think about skipping it...
+                  px > 0 && insideSet(px-blockSize, py)
+                }
+                else { calculated(px, py)
+                  false
+                }
                 val xf = view.center.real + view.scale * (xp.toDouble / width - 0.5)
                 val pos = Complex(xf, yf)
                 val result = escapes(pos, view.bailout)
+                calculated.mark(xp, yp)
                 val extra = result.location // + pos
                 val color = result iterations match {
-                  case None => Color.BLACK
-                  case Some(iter_count) => extra.real match {
-                  /*
-                  case x if x > 0 => {
-                    val angle = atan2(extra.imag, x)/(2*Pi)+0.5
-                    if (angle > -0.75) {
-                      val col:Int = (abs(angle)*255).toInt
-                      new Color(col,0,0)
-                    } else {
-                      iter_count & 0x07 match {
-                        case 0 => BLACK
-                        case 1 => RED
-                        case 2 => GREEN
-                        case 3 => YELLOW
-                        case 4 => BLUE
-                        case 5 => MAGENTA
-                        case 6 => CYAN
-                        case 7 => WHITE
-                      }
-                    }
+                  case None => {
+                    insideSet.mark(xp, yp)
+                    Color.BLACK
                   }
-                  */
+                  case Some(iter_count) => extra.real match {
                     case _ => {
                       val modulus = sqrt(extra.magnitudeSquared);
                       val inter = ((1- log(log(modulus))/log(2))-0.3466)/(1.52876-0.3466)

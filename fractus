@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-SCALA_HOME=/Users/ben/Downloads/scala-2.7.7.final
-CLASSPATH=$PWD/target/classes:scala-library-2.7.7.jar
+SCALA_VERSION=2.8.0
+MAVEN_REPO=/Users/bhardy/.m2/repository
+SCALA_LIB=$MAVEN_REPO/org/scala-lang/scala-library/$SCALA_VERSION/scala-library-$SCALA_VERSION.jar
+CLASSPATH=$PWD/target/classes:$SCALA_LIB
 MAIN_CLASS="net.aethersanctum.fractus.FractusMain"
 echo "java -cp $CLASSPATH \"$MAIN_CLASS\" $*"
 java -cp $CLASSPATH -Xmx1024m "$MAIN_CLASS" $*

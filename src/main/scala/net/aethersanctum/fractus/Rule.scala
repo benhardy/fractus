@@ -38,6 +38,7 @@ object Rule {
     def scale(s:Double): RuleBuilder
     def rotate(a:Double): RuleBuilder
     def polar: RuleBuilder
+    def cartesian: RuleBuilder
     def invertRadius: RuleBuilder
     def sine: RuleBuilder
     def also(f: Vector2=>Vector2):RuleBuilder
@@ -87,6 +88,10 @@ object Rule {
     }
     override def polar = {
       b_transform = b_transform.combine(Transform.polar)
+      this
+    }
+    override def cartesian = {
+      b_transform = b_transform.combine(Transform.cartesian)
       this
     }
     override def invertRadius = {

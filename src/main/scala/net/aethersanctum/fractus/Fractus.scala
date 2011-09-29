@@ -61,7 +61,7 @@ class Fractus(var fractalName:String, var rules:RuleSet, imgWidth:Int, imgHeight
   buttonPanel.add( new JLabel("Pixel count:") )
   private val countLabel = new JLabel("")
   buttonPanel.add( countLabel )
-  val items:Array[String] = RuleMap.items.keySet.toArray
+  val items:Array[String] = RuleMap.items.keySet.toArray.sortWith((_:String).compareTo(_:String)>0)
   buttonPanel.add( {
     val b = new JComboBox()
     items.foreach{ b.addItem }
@@ -103,14 +103,14 @@ class Fractus(var fractalName:String, var rules:RuleSet, imgWidth:Int, imgHeight
   }
 
   def startAfresh(name:String) = {
-    rules = RuleMap(fractalName) match {
-      case Some(x) => x
-      case _ => throw new IllegalArgumentException("unknown ruleset " + name)
+    rules = RuleMap(fractalName) getOrElse {
+      throw new IllegalArgumentException("unknown ruleset " + name)
     }
     fractalName = name
     drawRunner.stop
     img2d.setColor(Color.BLACK)
     img2d.fillRect(0,0,imgWidth,imgHeight);
+    drawPanel.repaint();
     drawRunner = new DrawRunner(img2d, rules, imgWidth, imgHeight)
     drawer = new Thread(drawRunner)
     drawer.start
