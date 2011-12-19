@@ -4,6 +4,7 @@ import java.awt.Color
 import java.awt.Graphics
 import Math._
 import net.aethersanctum.fractus.Colors._
+import net.aethersanctum.fractus.Vector._
 import annotation.tailrec
 import java.util.concurrent.atomic.AtomicBoolean
 

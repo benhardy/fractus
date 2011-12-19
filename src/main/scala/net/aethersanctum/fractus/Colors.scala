@@ -2,7 +2,9 @@ package net.aethersanctum.fractus
 
 import java.awt.Color
 
-
+/**
+ * Some color
+ */
 object Colors {
   val PURPLE = new Color(128,0,255)
   val CREAM = new Color(255,0xe0,0xc0)

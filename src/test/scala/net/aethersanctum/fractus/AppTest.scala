@@ -1,7 +1,7 @@
 package net.aethersanctum.fractus;
 
 import org.junit.Test
-import net.aethersanctum.fractus.Transform._
+import Transform._
 
 
 

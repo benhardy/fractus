@@ -1,9 +1,5 @@
 package net.aethersanctum.fractus.util
 
-/**
- * Copright 2000-2010 eHarmony, Inc. All rights reserved.
- * @author bhardy
- */
 
 sealed abstract case class PointInfo
 

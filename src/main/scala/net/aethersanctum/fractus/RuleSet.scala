@@ -1,6 +1,6 @@
 package net.aethersanctum.fractus
 
-import ruleset.RuleMap
+import examples.Examples
 
 
 trait RuleSet {
@@ -27,9 +27,18 @@ trait RuleSet {
 
 }
 
+object RuleSet {
+  def apply(rules : Rule*) : RuleSet = {
+    val array = rules.toArray[Rule]
+    new RuleSet() {
+      override def getRules = array
+    }
+  }
+}
+
 class RuleSetFinder {
   def find(name:String): RuleSet = {
-    RuleMap(name).getOrElse {
+    Examples(name).getOrElse {
       throw new IllegalArgumentException("couldn't find a rule by the name of "+name)
     }
   }

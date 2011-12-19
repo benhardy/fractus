@@ -2,6 +2,9 @@ package net.aethersanctum.fractus
 
 import Math._
 
+/**
+ * Provides support for both 2 and 3 dimensional vectors.
+ */
 trait Vector [V <: Vector[V]] {
   def +(v:V): V
   def -(v:V): V

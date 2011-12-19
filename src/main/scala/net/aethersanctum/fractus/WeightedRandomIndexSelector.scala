@@ -1,7 +1,8 @@
 package net.aethersanctum.fractus
 
 import Math.random
-
+import java.lang.{StringBuilder => jStringBuilder}
+import scala.collection.mutable.StringBuilder
 
 /**
  * Constructs a normalized array of weights, and allows you to select an index
@@ -18,9 +19,9 @@ import Math.random
  */
 class WeightedRandomIndexSelector(rawWeights:Array[Double]) {
 
-	val tot:Double = rawWeights.foldLeft(0.0) { _ + _ }
+	val tot:Double = rawWeights.sum
   val weights = rawWeights.map { _ / tot }
-  println("Weights reset to " + weights.map{""+_}.foldLeft(""){_ + " "+ _})
+  println("Weights reset to " +  toString())
 
 	/**
 	 * get the next index value
@@ -35,14 +36,22 @@ class WeightedRandomIndexSelector(rawWeights:Array[Double]) {
     }
 		if (t<weights.length) t else weights.length-1;
 	}
+  
+  override def toString() = {
+    weights.foldLeft(new scala.StringBuilder) {
+      (s:scala.StringBuilder, x:Double) => s append " " append x
+      s
+    }.toString
+  }
 }
+
 object WeightedRandomIndexSelector {
 	/**
 	 * builder class will extract weights from an array of T, as long as you provide an
 	 * extractor function that will extract the weight from an individual T
 	 */
 
-  def build[T](items:Array[T], f:(T => Double) ) = {
+  def apply[T](items:Array[T])( f:(T => Double) ) = {
     val weights =  items.map(f)  
     new WeightedRandomIndexSelector(weights);
   }
