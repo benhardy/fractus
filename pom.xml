@@ -7,6 +7,7 @@
     <inceptionYear>2009</inceptionYear>
     <properties>
         <scala.version>2.8.1</scala.version>
+        <scalatest.version>1.5.1</scalatest.version>
     </properties>
 
     <repositories>
@@ -30,6 +31,11 @@
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
             <version>${scala.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_${scala.version}</artifactId>
+            <version>${scalatest.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

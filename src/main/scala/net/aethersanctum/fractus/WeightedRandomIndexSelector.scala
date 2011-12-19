@@ -16,8 +16,10 @@ import scala.collection.mutable.StringBuilder
  * To select the next index, a random number between 0 and 1 is selected. We
  * then traverse the array of weights, adding each to a total until the total
  * is greater than the randomly selected number. The array index is returned.
+ * <p>
+ * The random number source can be altered for testing purposes.
  */
-class WeightedRandomIndexSelector(rawWeights:Array[Double]) {
+class WeightedRandomIndexSelector(rawWeights:Array[Double], selector: (()=>Double) = (() => random)) {
 
 	val tot:Double = rawWeights.sum
   val weights = rawWeights.map { _ / tot }
@@ -27,10 +29,10 @@ class WeightedRandomIndexSelector(rawWeights:Array[Double]) {
 	 * get the next index value
 	 */
 	def next:Int = {
-		val randy = random
+		val position: Double = selector()
 		var tot: Double = weights(0)
     var t: Int = 0
-    while(randy > tot && t<weights.length) {
+    while(position > tot && t<weights.length) {
       t = t + 1
       tot += weights(t)
     }
@@ -55,5 +57,4 @@ object WeightedRandomIndexSelector {
     val weights =  items.map(f)  
     new WeightedRandomIndexSelector(weights);
   }
-
 }
