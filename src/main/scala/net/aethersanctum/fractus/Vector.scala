@@ -3,17 +3,26 @@ package net.aethersanctum.fractus
 import Math._
 
 /**
- * Provides support for both 2 and 3 dimensional vectors.
+ * Provides support for both 2 and 3 dimensional vectors in Cartesian space
  */
 trait Vector [V <: Vector[V]] {
+  /** vector addition/translation */
   def +(v:V): V
+  /** vector subtraction */
   def -(v:V): V
+  /** multiply this vector by a scalar (scaling) */
   def *(k:Double): V
+  /** multiply this vector by the inverse of a scalar (scaling) */
   def /(k:Double): V
+  /** dot product between this vector and another */
   def dot(v:V): Double
+  /** the scalar length of this vector */
   def length: Double
+  /** the highest of all this vector's component values */
   def max: Double
+  /** the lowest of all this vector's component values */
   def min: Double
+  /** this vector scaled to have a length of 1 */
   def unit = {
     val len = length
     if (len>0)
@@ -21,9 +30,13 @@ trait Vector [V <: Vector[V]] {
     else
       self
   }
+  /** this vector itself */
   protected def self: V
 }
 
+/**
+ * 2D vectors in Cartesian space
+ */
 class Vector2(a:Double,b:Double) extends Vector[Vector2] {
   def x = a
   def y = b
@@ -39,6 +52,9 @@ class Vector2(a:Double,b:Double) extends Vector[Vector2] {
   def min = if (x<y) x else y
 }
 
+/**
+ * 2D vectors in Polar space
+ */
 class PolarVector(radius:Double, angle:Double) {
   def r = radius
   def t = angle
@@ -49,10 +65,14 @@ class PolarVector(radius:Double, angle:Double) {
   def spin(dt:Double) = new PolarVector(r, t + dt)
   def length = r
 }
+
 object PolarVector {
   def apply(r:Double,t:Double) = new PolarVector(r,t)
 }
 
+/**
+ * 3D vectors in Cartesian space
+ */
 class Vector3(a:Double,b:Double,c:Double) extends Vector[Vector3] {
   def x = a
   def y = b
@@ -68,11 +88,17 @@ class Vector3(a:Double,b:Double,c:Double) extends Vector[Vector3] {
   def min = if (x<y) x else if (y<z) y else z
 }
 
+
+/**
+ * Handy ways to create vectors and convert them to/from tuples implicitly.
+ */
 object Vector {
   def apply(a:Double, b:Double) = new Vector2(a,b)
   def apply(a:Double, b:Double, c:Double) = new Vector3(a,b,c)
   def polar(r:Double, t:Double) = new PolarVector(r,t)
+
   implicit def tupleToVector2(t:(Double,Double)) = Vector(t._1, t._2)
+
   implicit def tupleToVector3(t:(Double,Double,Double)) = Vector(t._1, t._2, t._3)
 
   implicit def cartesianToPolar(c:Vector2) = {

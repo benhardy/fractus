@@ -5,6 +5,7 @@ import java.awt.Graphics
 import Math._
 import net.aethersanctum.fractus.Colors._
 import net.aethersanctum.fractus.Vector._
+
 import annotation.tailrec
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -39,16 +40,16 @@ class DrawRunner(graphics: Graphics, rules: RuleSet, width: Int, height: Int)
     val pos = Vector(0.0, 0.0)
     val color = Color.BLACK
 
-    loopit(pos, color)
+    loopit(rules.state, pos, color)
   }
 
   @tailrec
-  final def loopit(oldPos: Vector2, oldColor: Color) {
+  final def loopit(ruleState:RuleSetRunState, oldPos: Vector2, oldColor: Color) {
     if (!keepGoing.get()) {
       println("DrawRunner got a stop signal")
     }
     else {
-      val rule = rules.next
+      val (rule, nextRuleState) = ruleState.next
       val color = colorMerge(oldColor, rule.color, rule.colorWeight);
       val pos = rule.transform(oldPos);
       val ppos = pos
@@ -60,7 +61,7 @@ class DrawRunner(graphics: Graphics, rules: RuleSet, width: Int, height: Int)
         brush.paint(xm, ym, color)
         pixelCount = pixelCount + 1;
       }
-      loopit(pos, color)
+      loopit(nextRuleState, pos, color)
     }
   }
 

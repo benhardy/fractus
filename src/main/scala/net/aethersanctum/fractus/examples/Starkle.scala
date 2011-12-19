@@ -1,11 +1,10 @@
 package net.aethersanctum.fractus.examples
 
 import net.aethersanctum.fractus.Rule._
-import net.aethersanctum.fractus.{Vector2, Rule, RuleSet}
-import net.aethersanctum.fractus.Vector
 import java.awt.Color._
 import net.aethersanctum.fractus.Colors._
 import Math._
+import net.aethersanctum.fractus._
 
 class Starkle extends RuleSet() {
 
@@ -23,11 +22,11 @@ class Starkle extends RuleSet() {
     )
   }
 
-  override def nextIndex: Int = {
-    current match {
+  override def nextIndex(state:RuleSetRunState): Int = {
+    state.current match {
       //case 2 => if (random > 0.5) 1 else 3
       //case 3 => if (random > 0.1) 3 else super.nextIndex
-      case _ => super.nextIndex
+      case _ => super.nextIndex(state)
     }
   }
 }

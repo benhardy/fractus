@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-SCALA_VERSION=2.8.0
-MAVEN_REPO=/Users/bhardy/.m2/repository
+SCALA_VERSION=2.8.1
+MAVEN_REPO=$HOME/.m2/repository
 SCALA_LIB=$MAVEN_REPO/org/scala-lang/scala-library/$SCALA_VERSION/scala-library-$SCALA_VERSION.jar
 CLASSPATH=$PWD/target/classes:$SCALA_LIB
 MAIN_CLASS="net.aethersanctum.fractus.FractusMain"

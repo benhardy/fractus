@@ -8,6 +8,9 @@ import net.aethersanctum.fractus.Vector._
 import net.aethersanctum.fractus.Rule._
 import net.aethersanctum.fractus.Transform._
 
+/**
+ * Example fractal RuleSets
+ */
 object Examples extends (String=>Option[RuleSet]) {
 
   implicit def buildRules(builders:Traversable[RuleBuilder]) = builders.map { _.build }
@@ -120,7 +123,7 @@ object Examples extends (String=>Option[RuleSet]) {
     ),
     "AlienBlueCheeseLotus" -> RuleSet(
       // THIS ONE IS A FULLY AWESOME DERIVATIVE OF THE ALIEN BLUE CHEESE FRACTAL
-      weight(0.15).color(BLUE).colorWeight(0.3).also( _ + (2.0, 1.0) ),
+      weight(0.15).color(BLUE).colorWeight(0.3).translate(2.0, 1.0),
       weight(1).color(WHITE).colorWeight(0.07).also(
         (in:Vector2) => {
           val x = in.x

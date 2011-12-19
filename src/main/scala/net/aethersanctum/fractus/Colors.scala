@@ -1,7 +1,7 @@
 package net.aethersanctum.fractus
 
 import java.awt.Color
-
+import Vector._
 /**
  * Some color
  */

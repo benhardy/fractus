@@ -1,10 +1,10 @@
 package net.aethersanctum.fractus.examples
 
-import net.aethersanctum.fractus.{Rule, RuleSet}
 import net.aethersanctum.fractus.Rule._
 import java.awt.Color._
 import net.aethersanctum.fractus.Colors._
 import Math._
+import net.aethersanctum.fractus.{RuleSetRunState, Rule, RuleSet}
 
 class Spongy extends RuleSet {
 
@@ -30,13 +30,13 @@ class Spongy extends RuleSet {
     n(p)
   }
 
-  override def nextIndex: Int = {
+  override def nextIndex(state:RuleSetRunState): Int = {
     var ok = false
     var default = -1
     while (!ok) {
-      default = super.nextIndex
+      default = super.nextIndex(state)
       // figure out which combinations of previous, current and next rules we don't want
-      ok = (previous, current, default) match {
+      ok = (state.previous, state.current, default) match {
         case (1, 7, 0) => false
         case (7, 7, 0) => false
         case (3, 5, 0) => false
