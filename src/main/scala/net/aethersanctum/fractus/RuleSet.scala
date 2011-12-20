@@ -6,7 +6,7 @@ import examples.Examples
 trait RuleSet {
   def getRules: Array[Rule]
 
-  val defaultProbs = getRules.map { _ weight }
+  val defaultProbs = getRules.map { _.weight }
   val defaultSelector = new WeightedRandomIndexSelector(defaultProbs)
   def scale:Double = 1
 

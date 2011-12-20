@@ -3,7 +3,7 @@ package net.aethersanctum.fractus.examples
 import net.aethersanctum.fractus.Rule._
 import java.awt.Color._
 import net.aethersanctum.fractus.Colors._
-import Math._
+import math._
 import net.aethersanctum.fractus.{RuleSetRunState, Rule, RuleSet}
 
 class Spongy extends RuleSet {

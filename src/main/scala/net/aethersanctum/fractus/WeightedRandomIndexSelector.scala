@@ -1,6 +1,6 @@
 package net.aethersanctum.fractus
 
-import Math.random
+import math.random
 import java.lang.{StringBuilder => jStringBuilder}
 import scala.collection.mutable.StringBuilder
 
@@ -39,11 +39,11 @@ class WeightedRandomIndexSelector(rawWeights:Array[Double], selector: (()=>Doubl
 		if (t<weights.length) t else weights.length-1;
 	}
   
-  override def toString() = {
+  override def toString = {
     weights.foldLeft(new scala.StringBuilder) {
       (s:scala.StringBuilder, x:Double) => s append " " append x
       s
-    }.toString
+    }.toString()
   }
 }
 

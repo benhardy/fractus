@@ -2,7 +2,7 @@ package net.aethersanctum.fractus
 
 import java.awt.Color
 import java.awt.Graphics
-import Math._
+import math._
 import net.aethersanctum.fractus.Colors._
 import net.aethersanctum.fractus.Vector._
 

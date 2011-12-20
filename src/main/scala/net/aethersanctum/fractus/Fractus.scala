@@ -17,7 +17,9 @@ object SwingUtil {
   }
   /** convert a code block to a Swing ActionListener where required */
   implicit def doSomething(f: ActionEvent => Any) = new ActionListener() {
-    override def actionPerformed(e:ActionEvent) = f(e)
+    override def actionPerformed(e:ActionEvent) {
+      f(e)
+    }
   }
 
   /** create a button with an attached Action block */
@@ -50,8 +52,8 @@ class Fractus(var fractalName:String, var rules:RuleSet, imgWidth:Int, imgHeight
   val scroller = new JScrollPane( drawPanel )
   scroller.setMinimumSize(new Dimension(400,400))
 
-  getContentPane().setLayout( new BorderLayout() )
-  getContentPane().add( scroller, BorderLayout.CENTER )
+  getContentPane.setLayout( new BorderLayout() )
+  getContentPane.add( scroller, BorderLayout.CENTER )
   getContentPane().add( buttonPanel, BorderLayout.SOUTH )
 
 
@@ -61,7 +63,7 @@ class Fractus(var fractalName:String, var rules:RuleSet, imgWidth:Int, imgHeight
   private def getDrawRunner = drawRunner
 
   private val refreshTicker = new Runnable() {
-    override def run = {
+    override def run() = {
         while(true) {
           sleep(1000)
           val ratio = getDrawRunner.getPixelCount.toDouble / (imgWidth * imgHeight)
@@ -71,7 +73,7 @@ class Fractus(var fractalName:String, var rules:RuleSet, imgWidth:Int, imgHeight
     }
   };
 
-  def startThreads = {
+  def startThreads() {
     drawThread.start()
     new Thread(refreshTicker).start()
   }
@@ -84,13 +86,13 @@ class Fractus(var fractalName:String, var rules:RuleSet, imgWidth:Int, imgHeight
       throw new IllegalArgumentException("unknown ruleset " + name)
     }
     fractalName = name
-    drawRunner.stop
+    drawRunner.stop()
     img2d.setColor(Color.BLACK)
     img2d.fillRect(0,0,imgWidth,imgHeight);
     drawPanel.repaint();
     drawRunner = new DrawRunner(img2d, rules, imgWidth, imgHeight)
     drawThread = new Thread(drawRunner)
-    drawThread.start
+    drawThread.start()
   }
   
   def createDrawPanel : JPanel = {
@@ -104,7 +106,7 @@ class Fractus(var fractalName:String, var rules:RuleSet, imgWidth:Int, imgHeight
         g.drawImage(img, 0, 0, null)
       }
 
-      override def paint(g: Graphics) = {
+      override def paint(g: Graphics) {
         g.drawImage(img, 0, 0, null)
       }
 
@@ -117,12 +119,12 @@ class Fractus(var fractalName:String, var rules:RuleSet, imgWidth:Int, imgHeight
 
     val b = new JComboBox()
     items.foreach {
-      b.addItem
+      b addItem _
     }
     b.setSelectedItem(fractalName)
     b.addActionListener({
       (e: ActionEvent) =>
-        val res = e.getSource().asInstanceOf[JComboBox].getSelectedItem.asInstanceOf[String]
+        val res = e.getSource.asInstanceOf[JComboBox].getSelectedItem.asInstanceOf[String]
         startAfresh(res)
     })
     b

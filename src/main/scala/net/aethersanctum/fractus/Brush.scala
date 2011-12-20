@@ -1,6 +1,7 @@
 package net.aethersanctum.fractus
 
 import java.awt.Color
+import math._
 
 import net.aethersanctum.fractus.Colors._
 
@@ -15,7 +16,7 @@ trait Brush {
  * dumbly draw a single point at the requested pixel coordinates
  */
 class IntegerPointBrush(canvas:MegaCanvas) extends Brush {
-  override def paint(x:Double, y:Double, c:Color) : Unit = {
+  override def paint(x:Double, y:Double, c:Color) {
     canvas.paint(x.toInt, y.toInt, c, 1.00)
   }
 }
@@ -56,7 +57,7 @@ class InitiallyBlurryBrush(canvas:MegaCanvas) extends Brush {
     1 + 4 / (hits+1)
   }
 
-  override def paint(xp:Double, yp:Double, color:Color) : Unit = {
+  override def paint(xp:Double, yp:Double, color:Color) {
     val brushWidth = pixelWidth(canvas.hits(xp.toInt, yp.toInt))
 
     val ystart = yp - brushWidth/2
@@ -64,13 +65,13 @@ class InitiallyBlurryBrush(canvas:MegaCanvas) extends Brush {
     var ystartOff = ystart - yi
     var yPaintLeft = brushWidth
     while(yPaintLeft>0) {
-      val yPaintNeeded = Math.min(yPaintLeft, 1-ystartOff)
+      val yPaintNeeded = min(yPaintLeft, 1-ystartOff)
       val xstart = xp - brushWidth/2
       var xi = xstart.toInt
       var xstartOff = xstart - xi
       var xPaintLeft = brushWidth
       while(xPaintLeft > 0) {
-        var xPaintNeeded = Math.min(yPaintLeft, 1-xstartOff)
+        var xPaintNeeded = min(yPaintLeft, 1-xstartOff)
         var stroke = xPaintNeeded * yPaintNeeded / (brushWidth * brushWidth)
         canvas.paint(xi, yi, color, stroke)
         xPaintLeft = xPaintLeft - xPaintNeeded

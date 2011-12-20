@@ -2,7 +2,7 @@ package net.aethersanctum.fractus.examples
 
 import java.awt.Color._
 import net.aethersanctum.fractus.Colors._
-import Math._
+import math._
 import net.aethersanctum.fractus.{Vector, Vector2, RuleSet, Rule}
 import net.aethersanctum.fractus.Vector._
 import net.aethersanctum.fractus.Rule._
@@ -50,19 +50,19 @@ object Examples extends (String=>Option[RuleSet]) {
     
     "block-tree" -> RuleSet(
       rule.weight(1).color(RED).colorWeight(0.8).transform( (v:Vector2) => 
-          new Vector2( (Math.sin(v.x *31 + v.y*53 +1)*0.5+0.5) * 0.2, Math.sin(v.x *29 + v.y*47 +3)*0.5+0.5)
+          new Vector2( (sin(v.x *31 + v.y*53 +1)*0.5+0.5) * 0.2, sin(v.x *29 + v.y*47 +3)*0.5+0.5)
       ),
       rule.weight(8).color(GREEN).colorWeight(0.1).scale(0.8).rotate(45).translate(0,1),
       rule.weight(8).color(GREEN).colorWeight(0.1).scale(0.8).rotate(45).scale(-1,1).translate(0.2,1)
     ),
     "circles" -> RuleSet(
       rule.weight(4).color(RED).colorWeight(0.8).transform( (v:Vector2) => 
-          new Vector2( Math.sin(v.x *131 + v.y*153 +1)*0.5+0.6, Math.sin(v.x *229 + v.y*147 +3)*1000)
+          new Vector2(sin(v.x *131 + v.y*153 +1)*0.5+0.6, sin(v.x *229 + v.y*147 +3)*1000)
       ).cartesian.invertRadius.scale(0.3).translate(-2,1).rotate(10),
       rule.weight(6).color(GREEN).colorWeight(0.1).scale(0.8).translate(0.05,-0.8),
       rule.weight(6).color(YELLOW).colorWeight(0.1).polar.translate(-1,2),
       rule.weight(4).color(BLUE).colorWeight(1).transform( (v:Vector2) => 
-          new Vector2( -0.3, Math.sin(v.x *229 + v.y*147 +3)*10)
+          new Vector2( -0.3, sin(v.x *229 + v.y*147 +3)*10)
       ).rotate(45),
       rule.weight(50).color(YELLOW).colorWeight(0.0).scale(-1,1)
     ),
@@ -79,8 +79,8 @@ object Examples extends (String=>Option[RuleSet]) {
     "fern" -> RuleSet(
       rule.weight(4).color(RED).colorWeight(0.8).transform( (v:Vector2) => {
           new Vector2(
-            (Math.sin(v.x *31 + v.y*53 +1)*0.5+0.5) * 0.2,
-            Math.sin(v.x *29 + v.y*47 +3)*0.5+0.5
+            (sin(v.x *31 + v.y*53 +1)*0.5+0.5) * 0.2,
+             sin(v.x *29 + v.y*47 +3)*0.5+0.5
           )
         }
       ).translate(0,-1),

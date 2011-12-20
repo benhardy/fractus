@@ -1,6 +1,6 @@
 package net.aethersanctum.fractus
 
-import Math._
+import math._
 
 /**
  * Provides support for both 2 and 3 dimensional vectors in Cartesian space
@@ -124,7 +124,7 @@ object Vector {
   implicit def tupleToVector3(t:(Double,Double,Double)) = Vector(t._1, t._2, t._3)
 
   implicit def cartesianToPolar(c:Vector2) = {
-    PolarVector(c.length, Math.atan2(c.y, c.x))
+    PolarVector(c.length, atan2(c.y, c.x))
   }
   implicit def polarToCartesian(p:PolarVector) = {
     Vector(p.r * cos(p.t), p.r * sin(p.t))

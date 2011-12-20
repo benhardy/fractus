@@ -23,6 +23,6 @@ object FractusMain {
         val mainwin = new Fractus(fractalName, rules, iwidth, iheight)
         mainwin.pack()
         mainwin setVisible true
-        mainwin startThreads
+        mainwin.startThreads
     }
 }

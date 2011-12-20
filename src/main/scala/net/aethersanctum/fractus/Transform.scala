@@ -1,7 +1,7 @@
 package net.aethersanctum.fractus
 
 
-import Math._
+import math._
 
 /**
  * A Transform is a function that transforms one point into another.

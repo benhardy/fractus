@@ -15,8 +15,8 @@ class WeightedRandomIndexSelectorTest extends FunSuite with ShouldMatchers {
    */
   def numberSource(items: Iterable[Double]): (() => Double) = {
     val iterator = items.iterator
-    new Function0[Double] {
-      override def apply = iterator.next
+    new (() => Double) {
+      override def apply() = iterator.next
     }
   }
 

@@ -12,7 +12,7 @@ class PaintBucket {
   var blue: Double = 0.0;
   var hits: Double = 0.0;
 
-  def paint(color:Color, intensity:Double) = {
+  def paint(color:Color, intensity:Double) {
     red +=   color.getRed * intensity
     green += color.getGreen * intensity
     blue +=  color.getBlue * intensity

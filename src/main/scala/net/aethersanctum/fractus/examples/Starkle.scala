@@ -3,7 +3,7 @@ package net.aethersanctum.fractus.examples
 import net.aethersanctum.fractus.Rule._
 import java.awt.Color._
 import net.aethersanctum.fractus.Colors._
-import Math._
+import math._
 import net.aethersanctum.fractus._
 
 class Starkle extends RuleSet() {
