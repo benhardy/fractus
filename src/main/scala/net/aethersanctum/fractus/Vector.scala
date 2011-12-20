@@ -50,6 +50,17 @@ class Vector2(a:Double,b:Double) extends Vector[Vector2] {
   def self = this
   def max = if (x>y) x else y
   def min = if (x<y) x else y
+  override def equals(other:Any): Boolean = {
+    if (other == null) {
+      false
+    }
+    else {
+      other match {
+        case o:Vector3 => x == o.x && y == o.y
+        case _ => false
+      }
+    }
+  }
 }
 
 /**
@@ -86,6 +97,17 @@ class Vector3(a:Double,b:Double,c:Double) extends Vector[Vector3] {
   def self = this
   def max = if (x>y) x else if (y>z) y else z
   def min = if (x<y) x else if (y<z) y else z
+  override def equals(other:Any): Boolean = {
+    if (other == null) {
+      false
+    }
+    else {
+      other match {
+        case o:Vector3 => x == o.x && y == o.y && z == o.z
+        case _ => false
+      }
+    }
+  }
 }
 
 
