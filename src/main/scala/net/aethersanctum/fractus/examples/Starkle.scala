@@ -22,7 +22,7 @@ class Starkle extends RuleSet() {
     )
   }
 
-  override def nextIndex(state:RuleSetRunState): Int = {
+  override def nextIndex(state:RuleState): Int = {
     state.current match {
       //case 2 => if (random > 0.5) 1 else 3
       //case 3 => if (random > 0.1) 3 else super.nextIndex

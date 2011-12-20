@@ -63,6 +63,12 @@ class Vector2(a:Double,b:Double) extends Vector[Vector2] {
   }
 }
 
+object Vector2 {
+  val ORIGIN = new Vector2(0, 0)
+  val X = new Vector2(1, 0)
+  val Y = new Vector2(0, 1)
+}
+
 /**
  * 2D vectors in Polar space
  */
@@ -110,6 +116,12 @@ class Vector3(a:Double,b:Double,c:Double) extends Vector[Vector3] {
   }
 }
 
+object Vector3 {
+  val ORIGIN = new Vector3(0, 0, 0)
+  val X = new Vector3(1, 0, 0)
+  val Y = new Vector3(0, 1, 0)
+  val Z = new Vector3(0, 0, 1)
+}
 
 /**
  * Handy ways to create vectors and convert them to/from tuples implicitly.

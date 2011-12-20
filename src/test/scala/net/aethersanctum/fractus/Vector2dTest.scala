@@ -6,7 +6,7 @@ import org.junit.runner.RunWith
 import org.scalatest.matchers.ShouldMatchers
 
 @RunWith(classOf[JUnitRunner])
-class VectorTest extends FunSuite with ShouldMatchers {
+class Vector2dTest extends FunSuite with ShouldMatchers {
   val tolerance = 0.0000001
 
   test("2d vector addition") {

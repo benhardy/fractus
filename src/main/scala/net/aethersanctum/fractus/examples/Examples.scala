@@ -9,7 +9,7 @@ import net.aethersanctum.fractus.Rule._
 import net.aethersanctum.fractus.Transform._
 
 /**
- * Example fractal RuleSets
+ * Example fractal RuleSets, held in a Map by name.
  */
 object Examples extends (String=>Option[RuleSet]) {
 

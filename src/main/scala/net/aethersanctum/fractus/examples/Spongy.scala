@@ -4,7 +4,7 @@ import net.aethersanctum.fractus.Rule._
 import java.awt.Color._
 import net.aethersanctum.fractus.Colors._
 import math._
-import net.aethersanctum.fractus.{RuleSetRunState, Rule, RuleSet}
+import net.aethersanctum.fractus.{RuleState, Rule, RuleSet}
 
 class Spongy extends RuleSet {
 
@@ -30,7 +30,7 @@ class Spongy extends RuleSet {
     n(p)
   }
 
-  override def nextIndex(state:RuleSetRunState): Int = {
+  override def nextIndex(state:RuleState): Int = {
     var ok = false
     var default = -1
     while (!ok) {

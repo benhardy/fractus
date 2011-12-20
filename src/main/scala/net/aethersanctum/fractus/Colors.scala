@@ -1,9 +1,12 @@
 package net.aethersanctum.fractus
 
 import java.awt.Color
-import Vector._
+import net.aethersanctum.fractus.Vector._
+import net.aethersanctum.fractus.Vector3.ORIGIN
+
 /**
- * Some color
+ * Some color manipulation functions. Treat Colors as Vectors for convenience
+ * and allow easy conversions.
  */
 object Colors {
   val PURPLE = new Color(128,0,255)
@@ -34,5 +37,19 @@ object Colors {
       if (r>255) 255 else if (r<0) 0 else r,
       if (g>255) 255 else if (g<0) 0 else g,
       if (b>255) 255 else if (b<0) 0 else b)
+  }
+
+
+  def attenuateColor(colorVector: Vector3): Vector3 = {
+    val highest = colorVector.max
+    if (highest > 255) {
+      colorVector * (255.0 / highest)
+    }
+    else if (colorVector.min < 0) {
+      Vector3.ORIGIN
+    }
+    else {
+      colorVector // it's all good!
+    }
   }
 }

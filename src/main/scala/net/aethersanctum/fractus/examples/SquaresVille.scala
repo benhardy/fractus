@@ -24,7 +24,7 @@ class SquaresVille extends RuleSet {
     )
   }
 
-  override def nextIndex(state:RuleSetRunState): Int = {
+  override def nextIndex(state:RuleState): Int = {
     state.current match {
       case 3 => 0
       case _ => super.nextIndex(state)

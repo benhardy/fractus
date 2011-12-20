@@ -33,7 +33,7 @@ object SwingUtil {
 /**
  * Swing GUI for the app.
  */
-class Fractus(var fractalName:String, var rules:RuleSet, imgWidth:Int, imgHeight:Int) extends JFrame {
+class Fractus(var initFractalName:String, var rules:RuleSet, imgWidth:Int, imgHeight:Int) extends JFrame {
   import SwingUtil._
 
   System.out.println("new Fractus created @"+imgWidth+"x"+imgHeight)
@@ -82,13 +82,16 @@ class Fractus(var fractalName:String, var rules:RuleSet, imgWidth:Int, imgHeight
    * stop whatever we're doing and start drawing a new fractal with the given name
    */
   def startAfresh(name:String) = {
-    rules = Examples(fractalName) getOrElse {
-      throw new IllegalArgumentException("unknown ruleset " + name)
-    }
-    fractalName = name
+    val rules = RuleSet find name
     drawRunner.stop()
+    try {
+      drawThread.interrupt()
+    }catch {
+      case e:Exception => println("Caught an exception interrupting drawrunner but we don't care")
+    }
+    
     img2d.setColor(Color.BLACK)
-    img2d.fillRect(0,0,imgWidth,imgHeight);
+    img2d.fillRect(0,0,imgWidth,imgHeight)
     drawPanel.repaint();
     drawRunner = new DrawRunner(img2d, rules, imgWidth, imgHeight)
     drawThread = new Thread(drawRunner)
@@ -121,7 +124,7 @@ class Fractus(var fractalName:String, var rules:RuleSet, imgWidth:Int, imgHeight
     items.foreach {
       b addItem _
     }
-    b.setSelectedItem(fractalName)
+    b.setSelectedItem(initFractalName)
     b.addActionListener({
       (e: ActionEvent) =>
         val res = e.getSource.asInstanceOf[JComboBox].getSelectedItem.asInstanceOf[String]

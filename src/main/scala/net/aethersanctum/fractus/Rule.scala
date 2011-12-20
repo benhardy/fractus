@@ -12,6 +12,9 @@ trait Rule extends (Vector2 => Vector2) {
   override def apply(p:Vector2) = {
     transform(p)
   }
+  def apply(p:Vector2, c:Color) : (Vector2, Color) = {
+    (transform(p), colorMerge(c, color, colorWeight))
+  }
   def apply(c:Color):Color = {
     colorMerge(c, color, colorWeight)
   }
