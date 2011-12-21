@@ -5,8 +5,9 @@ import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
 import org.scalatest.matchers.ShouldMatchers
 
+
 @RunWith(classOf[JUnitRunner])
-class Vector2dTest extends FunSuite with ShouldMatchers {
+class Vector2dTest extends FunSuite with ShouldMatchers  {
   val tolerance = 0.0000001
 
   test("2d vector addition") {
@@ -73,5 +74,19 @@ class Vector2dTest extends FunSuite with ShouldMatchers {
   test("2d vector max") {
     val A = new Vector2(3,4)
     A.max should be (4.0 plusOrMinus tolerance)
+  }
+  test("2d vector equals") {
+    val A = new Vector2(3,4)
+    val B = new Vector2(3,4)
+    val C = new Vector2(1,2)
+    val D = "Hello"
+    A.equals(A) should be (true)
+    A.equals(B) should be (true)
+    A.equals(C) should be (false)
+    A.equals(D) should be (false)
+    A.equals(null) should be (false)
+    
+    // and in Scala...
+    (A == B) should be (true)
   }
 }

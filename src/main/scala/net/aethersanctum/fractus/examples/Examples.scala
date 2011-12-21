@@ -3,10 +3,10 @@ package net.aethersanctum.fractus.examples
 import java.awt.Color._
 import net.aethersanctum.fractus.Colors._
 import math._
-import net.aethersanctum.fractus.{Vector, Vector2, RuleSet, Rule}
 import net.aethersanctum.fractus.Vector._
 import net.aethersanctum.fractus.Rule._
 import net.aethersanctum.fractus.Transform._
+import net.aethersanctum.fractus._
 
 /**
  * Example fractal RuleSets, held in a Map by name.
@@ -17,12 +17,9 @@ object Examples extends (String=>Option[RuleSet]) {
 
   implicit def buildRule(builder:RuleBuilder) = builder.build
 
-  implicit def ruleSet(a:Traversable[Rule]):RuleSet = new RuleSet() {
-    override def getRules = a.toArray[Rule]
-  }
+  implicit def ruleSet(a:Traversable[Rule]):RuleSet = RuleSet(a)
 
-  def ruleSetScaled(a:Traversable[Rule], mscale:Double):RuleSet = new RuleSet() {
-    override def getRules = a.toArray[Rule]
+  def ruleSetScaled(a:Traversable[Rule], mscale:Double):RuleSet = new RandomSelectionRuleSet(a.toArray[Rule]) {
     override def scale = mscale
   }
 

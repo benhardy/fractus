@@ -37,7 +37,7 @@ trait Vector [V <: Vector[V]] {
 /**
  * 2D vectors in Cartesian space
  */
-class Vector2(a:Double,b:Double) extends Vector[Vector2] {
+final class Vector2(a:Double,b:Double) extends Vector[Vector2] {
   def x = a
   def y = b
   def +(v:Vector2) = new Vector2(x + v.x, y + v.y)
@@ -56,7 +56,7 @@ class Vector2(a:Double,b:Double) extends Vector[Vector2] {
     }
     else {
       other match {
-        case o:Vector3 => x == o.x && y == o.y
+        case o:Vector2 => x == o.x && y == o.y
         case _ => false
       }
     }
@@ -72,7 +72,7 @@ object Vector2 {
 /**
  * 2D vectors in Polar space
  */
-class PolarVector(radius:Double, angle:Double) {
+final class PolarVector(radius:Double, angle:Double) {
   def r = radius
   def t = angle
   def +(v:PolarVector) = new PolarVector(r + v.r, t + v.t)
@@ -90,7 +90,7 @@ object PolarVector {
 /**
  * 3D vectors in Cartesian space
  */
-class Vector3(a:Double,b:Double,c:Double) extends Vector[Vector3] {
+final class Vector3(a:Double,b:Double,c:Double) extends Vector[Vector3] {
   def x = a
   def y = b
   def z = c
@@ -134,6 +134,10 @@ object Vector {
   implicit def tupleToVector2(t:(Double,Double)) = Vector(t._1, t._2)
 
   implicit def tupleToVector3(t:(Double,Double,Double)) = Vector(t._1, t._2, t._3)
+
+  implicit def vector2ToTuple(v:Vector2) = (v.x, v.y)
+
+  implicit def vector3ToTuple(v:Vector3) = (v.x, v.y, v.z)
 
   implicit def cartesianToPolar(c:Vector2) = {
     PolarVector(c.length, atan2(c.y, c.x))

@@ -6,9 +6,7 @@ import net.aethersanctum.fractus.Colors._
 import math._
 import net.aethersanctum.fractus._
 
-class Starkle extends RuleSet() {
-
-  override def getRules: Array[Rule] = {
+class Starkle extends RandomSelectionRuleSet(
     Array[Rule](
       weight(1).color(BURGUNDY).colorWeight(0.70).scale(0.06).translate(0, 2),
       weight(1).color(CREAM).colorWeight(0.60).scale(0.06).translate(2, 0),
@@ -20,7 +18,7 @@ class Starkle extends RuleSet() {
       weight(10).color(GREEN).colorWeight(0).scale(1, -1),
       weight(10).color(GREEN).colorWeight(0).scale(-1, 1)
     )
-  }
+  ) {
 
   override def nextIndex(state:RuleState): Int = {
     state.current match {

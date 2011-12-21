@@ -10,19 +10,10 @@ import org.scalatest.matchers.ShouldMatchers
 @RunWith(classOf[JUnitRunner])
 class WeightedRandomIndexSelectorTest extends FunSuite with ShouldMatchers {
 
-  /**
-   * this can be used in place of a random number generator in tests.
-   */
-  def numberSource(items: Iterable[Double]): (() => Double) = {
-    val iterator = items.iterator
-    new (() => Double) {
-      override def apply() = iterator.next
-    }
-  }
 
   test("indexes are pulled out") {
     val weights = Array(1.0, 4.0, 2.0, 3.0)
-    val number_stream = numberSource(List(0.09, 0.49, 0.69, 0.99))
+    val number_stream = NumberSource(List(0.09, 0.49, 0.69, 0.99))
     val selector = new WeightedRandomIndexSelector(weights, number_stream)
 
     selector.next should be === 0
@@ -30,6 +21,17 @@ class WeightedRandomIndexSelectorTest extends FunSuite with ShouldMatchers {
     selector.next should be === 2
     selector.next should be === 3
   }
+}
 
+object NumberSource {
 
+  /**
+   * this can be used in place of a random number generator in tests.
+   */
+  def apply(items: Iterable[Double]): (() => Double) = {
+    val iterator = items.iterator
+    new (() => Double) {
+      override def apply() = iterator.next
+    }
+  }
 }

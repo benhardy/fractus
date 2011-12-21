@@ -42,6 +42,10 @@ class RuleSetRunStateMachine(val ruleSet:RuleSet) {
   def start: RuleState = new StateImpl
 
   class StateImpl(val current:Int = -1, val previous:Int = -1) extends RuleState {
+    /**
+     * the current fractal's RuleSet determines what rule is to be used next by
+     * supplying the index number of the next one.
+     */
     def next:(Rule, RuleState) = {
       val next = ruleSet.nextIndex(this)
       val new_previous = current

@@ -13,6 +13,13 @@ abstract class RuleSet {
   def getRules : Array[Rule]
 
   /**
+   * override nextIndex if you want to specify more complex rule selection
+   * behavior than just random. the default selector ignores the current
+   * state of the runner.
+   */
+  def nextIndex(currentState:RuleState):Int
+
+  /**
    * For any given RuleSet we should be able to look up a rule by its index number.
    */
   def apply(index:Int): Rule = getRules(index)
@@ -22,40 +29,40 @@ abstract class RuleSet {
    */
   def scale:Double = 1
 
+}
 
+/**
+ * default implementation of RuleSet includes random rule selection
+ */
+class RandomSelectionRuleSet(rules:Array[Rule]) extends RuleSet {
+
+  override def getRules = rules
   /**
    * by default, rules in a ruleset are selected randomly skewed by the weight of each rule.
    */
-  val defaultSelector = new WeightedRandomIndexSelector(getRules.map { _.weight })
+  val defaultSelector = WeightedRandomIndexSelector(rules) { _.weight }
 
   /**
    * override nextIndex if you want to specify more complex rule selection
    * behavior than just random. the default selector ignores the current
    * state of the runner.
    */
-  def nextIndex(currentState:RuleState):Int = defaultSelector.next
+  override def nextIndex(currentState:RuleState):Int = defaultSelector.next
 }
-
 
 object RuleSet {
   /**
    * Factory method for constructing a RuleSet from a variable length argument list of rules
    */
   def apply(rules : Rule*) : RuleSet = {
-    val array = rules.toArray[Rule]
-    new RuleSet() {
-      override def getRules = array
-    }
+    new RandomSelectionRuleSet(rules.toArray[Rule])
   }
 
   /**
    * Factory method for constructing a RuleSet from a collection of rules
    */
   def apply(rules : Traversable[Rule]) : RuleSet = {
-    val array = rules.toArray[Rule]
-    new RuleSet() {
-      override def getRules = array
-    }
+    new RandomSelectionRuleSet(rules.toArray[Rule])
   }
 
   /**

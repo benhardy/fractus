@@ -1,6 +1,9 @@
 package net.aethersanctum.fractus
 
-
+/**
+ * Main entry point to the application. Deals with command-line parameters,
+ * instantiates GUI, kicks off the rendering.
+ */
 object FractusMain {
 
     private val DEFAULT_IMAGE_WIDTH = 1000
@@ -13,7 +16,7 @@ object FractusMain {
             System.exit(-1)
         }
         val fractalName = argv(0)
-        val rules = RuleSet.find(fractalName)
+        val rules = RuleSet find fractalName
 
         val (iwidth, iheight) = if (argv.length == 3) {
             (Integer parseInt argv(1), Integer parseInt argv(2))

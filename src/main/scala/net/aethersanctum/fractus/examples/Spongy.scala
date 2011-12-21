@@ -4,12 +4,9 @@ import net.aethersanctum.fractus.Rule._
 import java.awt.Color._
 import net.aethersanctum.fractus.Colors._
 import math._
-import net.aethersanctum.fractus.{RuleState, Rule, RuleSet}
+import net.aethersanctum.fractus.{RandomSelectionRuleSet, RuleState, Rule, RuleSet}
 
-class Spongy extends RuleSet {
-
-  override def getRules: Array[Rule] = {
-    Array(
+class Spongy extends RandomSelectionRuleSet(Array(
       weight(1) color (RED) colorWeight (0.5) scale (1.0 / 3) translate(-1.5, 1.5),
       weight(1) color (GREEN) colorWeight (0.5) scale (1.0 / 3) translate(0.0, 1.5),
       weight(1) color (RED) colorWeight (0.5) scale (1.0 / 3) translate(1.5, 1.5),
@@ -21,8 +18,8 @@ class Spongy extends RuleSet {
       weight(1) color (RED) colorWeight (0.5) scale (1.0 / 3) translate(-1.5, -1.5),
       weight(1) color (GREEN) colorWeight (0.5) scale (1.0 / 3) translate(0.0, -1.5),
       weight(1) color (RED) colorWeight (0.5) scale (1.0 / 3) translate(1.5, -1.5)
-    )
-  }
+    ) ) {
+
 
   /**randomly choose something from the array of rule indices */
   def allow(n: Array[Int]) = {

@@ -13,12 +13,12 @@ trait Transform extends (Vector2 => Vector2) {
    * however, AffineTransforms can be condensed into one.
    */
   // there's gotta be a more concise way to do this
+
   def combine(secondary:Transform): Transform = {
-    val primary = this
-    Transform((p:Vector2) => secondary(primary(p)) )
+    Transform((p:Vector2) => secondary(this.apply(p)) )
   }
 
-  
+  // builder methods for creating combined transforms
   def translate(x:Double,y:Double) = combine(Transform.translate(x,y))
   def scale(x:Double,y:Double) = combine(Transform.scale(x,y))
   def scale(s:Double) = combine(Transform.scale(s))
@@ -30,6 +30,10 @@ trait Transform extends (Vector2 => Vector2) {
 
 case class AffineTransform(a:Double, b:Double, c:Double,
                            d:Double, e:Double, f:Double) extends Transform {
+  /**
+   * AffineTransforms can be combined in a more efficient way than simply
+   * chaining by using matrix multiplication instead.
+   */
   def combine(o:AffineTransform) = {
     new AffineTransform(a * o.a + d * o.b,
       b * o.a + e * o.b, c * o.a
@@ -49,24 +53,43 @@ case class AffineTransform(a:Double, b:Double, c:Double,
 }
 
 object Transform {
+  /**
+   * Identity transform. Has no effect.
+   */
   val none = AffineTransform(1, 0, 0, 0, 1, 0)
+
+  /**
+   * Factory method for translation transformations.
+   */
   def translate(x:Double, y:Double) = AffineTransform(1,0,x,0,1,y)
 
+  /**
+   * Factory method for scaling transforms where x and y values can be scaled independently.
+   */
   def scale(x:Double, y:Double) = AffineTransform(x,0,0,0,y,0)
 
+  /**
+   * Factory method for scaling transforms where x and y values are scaled by same factor.
+   */
   def scale(s:Double) = AffineTransform(s,0,0,0,s,0)
 
   /**
-   * convert vector functions to transforms at will
+   * Factory method for rotation transforms about the origin
+   */
+  def rotate(angleDegrees:Double) = {
+		val radians = toRadians(angleDegrees)
+    val c = cos(radians)
+    val s = sin(radians)
+		new AffineTransform(c, -s, 0, s, c, 0);
+	}
+
+  /**
+   * convert arbitrary vector functions to transforms at will, so that they can be combined, etc.
    */
   implicit def apply(vf: Vector2 => Vector2) = new Transform {
     override def apply(in:Vector2) = vf(in)
   }
 
-  def rotate(angle:Double) = {
-		val rads = toRadians(angle)
-		new AffineTransform(cos(rads), -sin(rads), 0, sin(rads), cos(rads), 0);
-	}
   def inPolarSpace(f: PolarVector => PolarVector) = new Transform {
     override def apply(in:Vector2) : Vector2 = {
       Vector.polarToCartesian(f(Vector.cartesianToPolar(in)))

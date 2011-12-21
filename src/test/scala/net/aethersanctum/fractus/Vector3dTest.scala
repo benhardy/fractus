@@ -2,8 +2,11 @@ package net.aethersanctum.fractus
 
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
 
 
+@RunWith(classOf[JUnitRunner])
 class Vector3dTest extends FunSuite with ShouldMatchers{
   val tolerance = 0.0000001
 
@@ -77,7 +80,19 @@ class Vector3dTest extends FunSuite with ShouldMatchers{
     val A = new Vector3(3,4,5)
     A.max should be (5.0 plusOrMinus tolerance)
   }
-
+  test("3d vector equals") {
+    val A = new Vector3(3,4,5)
+    val B = new Vector3(3,4,5)
+    val C = new Vector3(1,2,3)
+    val D = "Hello"
+    A.equals(A) should be (true)
+    A.equals(B) should be (true)
+    A.equals(C) should be (false)
+    A.equals(D) should be (false)
+    A.equals(null) should be (false)
+    // and in Scala...
+    (A == B) should be (true)
+  }
 
 
 }
