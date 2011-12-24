@@ -1,29 +1,46 @@
 package net.aethersanctum.fractus
 
 import java.awt.Color
-
+import Colors.colorMerge2
+/**
+ * RuleBasedFractals are built out of rules. Each rule defines transformations
+ * for pen location and color during the rendering of a fractal. Rules are weighted
+ * so that some can be more likely to be selected than others.
+ */
 trait Rule extends (Vector2 => Vector2) {
+  /**
+   * The weight of a rule affects its likelihood of selection. Is relative to weights of
+   * other rules in the same rule set.
+   */
   def weight: Double
+
+  /**
+   * How does this rule change the pen location?
+   */
   def transform: Vector2 => Vector2
+
+  /**
+   * The rule is assigned a color. The pen color is shifted towards this color when this
+   * rule is selected
+   */
   def color: Color
+
+  /**
+   * How far to shift the pen color towards the Rule's color (0.0 = none, 1.0 = all the way)
+   */
   def colorWeight: Double
-  def selectNext: Option[(Unit=>Int)]
+
+  def apply(p:Vector2, c:Color) : (Vector2, Color) = {
+    (transform(p), colorMerge2(c, color, colorWeight))
+  }
 
   override def apply(p:Vector2) = {
     transform(p)
   }
-  def apply(p:Vector2, c:Color) : (Vector2, Color) = {
-    (transform(p), colorMerge(c, color, colorWeight))
-  }
   def apply(c:Color):Color = {
-    colorMerge(c, color, colorWeight)
+    colorMerge2(c, color, colorWeight)
   }
-  def colorMerge(from: Color, to:Color, howFar:Double):Color = {
-    val r = from.getRed  * (1-howFar) + to.getRed  * howFar
-    val g = from.getGreen* (1-howFar) + to.getGreen* howFar
-    val b = from.getBlue * (1-howFar) + to.getBlue * howFar
-    new Color( r toInt, g toInt, b toInt )
-  }
+
   def weightIsLess(w:Double) = (weight < w)
 }
 
@@ -46,7 +63,6 @@ object Rule {
     def sine: RuleBuilder
     def also(f: Vector2=>Vector2):RuleBuilder
     def inPolarSpace(f: PolarVector=>PolarVector):RuleBuilder
-    def next(picker:(Unit=>Int)): RuleBuilder
     def build:Rule
   }
 
@@ -56,7 +72,6 @@ object Rule {
     var b_transform: Transform = Transform.none
     var b_color: Color = Color.WHITE
     var b_colorWeight: Double = 1
-    var b_allowNext: Option[(Unit=>Int)] = None
     override def weight(w:Double): RuleBuilder = {
       b_weight = w
       this
@@ -115,17 +130,12 @@ object Rule {
       b_transform = b_transform.combine(Transform.inPolarSpace(f))
       this
     }
-    override def next(picker: (Unit=>Int)) = {
-      b_allowNext = Some(picker)
-      this
-    }
     override def build: Rule = {
       new Rule() {
         override def weight: Double = { b_weight }
         override def transform: Vector2 => Vector2 = { b_transform }
         override def color: Color = { b_color }
         override def colorWeight: Double = { b_colorWeight }
-        override def selectNext: Option[(Unit=>Int)] = { b_allowNext }
       }
     }
   }

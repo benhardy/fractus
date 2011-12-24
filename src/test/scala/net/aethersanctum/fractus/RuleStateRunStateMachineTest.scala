@@ -11,7 +11,7 @@ import java.awt.Color._
 class RuleStateRunStateMachineTest extends FunSuite with ShouldMatchers {
 
   test("next state is correctly generated") {
-    val ruleSet = new RuleSet() {
+    val ruleSet = new RuleBasedFractal() {
       import Rule._
       val rules = Array[Rule](
         weight(1).translate(1,0).color(RED), 

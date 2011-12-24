@@ -16,7 +16,7 @@ object FractusMain {
             System.exit(-1)
         }
         val fractalName = argv(0)
-        val rules = RuleSet find fractalName
+        val rules = RuleBasedFractal find fractalName
 
         val (iwidth, iheight) = if (argv.length == 3) {
             (Integer parseInt argv(1), Integer parseInt argv(2))

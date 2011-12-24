@@ -6,7 +6,7 @@ import net.aethersanctum.fractus.Colors._
 import math._
 import net.aethersanctum.fractus._
 
-class Starkle extends RandomSelectionRuleSet(
+class Starkle extends RandomSelectionRuleBasedFractal(
     Array[Rule](
       weight(1).color(BURGUNDY).colorWeight(0.70).scale(0.06).translate(0, 2),
       weight(1).color(CREAM).colorWeight(0.60).scale(0.06).translate(2, 0),

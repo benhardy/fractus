@@ -3,9 +3,10 @@ package net.aethersanctum.fractus
 import examples.Examples
 
 /**
- * RuleSet encapsulates a group of rules which define a fractal's appearance.
+ * RuleBasedFractal encapsulates a group of rules which define a
+ * the appearance of an IFS/ChaosGame type fractal's appearance.
  */
-abstract class RuleSet {
+abstract class RuleBasedFractal {
 
   /**
    * retrieve all the rules at once
@@ -20,7 +21,7 @@ abstract class RuleSet {
   def nextIndex(currentState:RuleState):Int
 
   /**
-   * For any given RuleSet we should be able to look up a rule by its index number.
+   * For any given RuleBasedFractal we should be able to look up a rule by its index number.
    */
   def apply(index:Int): Rule = getRules(index)
 
@@ -32,9 +33,9 @@ abstract class RuleSet {
 }
 
 /**
- * default implementation of RuleSet includes random rule selection
+ * default implementation of RuleBasedFractal includes random rule selection
  */
-class RandomSelectionRuleSet(rules:Array[Rule]) extends RuleSet {
+class RandomSelectionRuleBasedFractal(rules:Array[Rule]) extends RuleBasedFractal {
 
   override def getRules = rules
   /**
@@ -50,25 +51,25 @@ class RandomSelectionRuleSet(rules:Array[Rule]) extends RuleSet {
   override def nextIndex(currentState:RuleState):Int = defaultSelector.next
 }
 
-object RuleSet {
+object RuleBasedFractal {
   /**
-   * Factory method for constructing a RuleSet from a variable length argument list of rules
+   * Factory method for constructing a RuleBasedFractal from a variable length argument list of rules
    */
-  def apply(rules : Rule*) : RuleSet = {
-    new RandomSelectionRuleSet(rules.toArray[Rule])
+  def apply(rules : Rule*) : RuleBasedFractal = {
+    new RandomSelectionRuleBasedFractal(rules.toArray[Rule])
   }
 
   /**
-   * Factory method for constructing a RuleSet from a collection of rules
+   * Factory method for constructing a RuleBasedFractal from a collection of rules
    */
-  def apply(rules : Traversable[Rule]) : RuleSet = {
-    new RandomSelectionRuleSet(rules.toArray[Rule])
+  def apply(rules : Traversable[Rule]) : RuleBasedFractal = {
+    new RandomSelectionRuleBasedFractal(rules.toArray[Rule])
   }
 
   /**
-   * Search for a RuleSet by name in the Examples.
+   * Search for a RuleBasedFractal by name in the Examples.
    */
-  def find(name:String): RuleSet = {
+  def find(name:String): RuleBasedFractal = {
     Examples(name).getOrElse {
       throw new IllegalArgumentException("couldn't find a rule by the name of "+name)
     }

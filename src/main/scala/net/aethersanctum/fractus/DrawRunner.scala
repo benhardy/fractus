@@ -19,21 +19,21 @@ trait PaintObserver {
 }
 
 /**
- * DrawRunner takes a Graphics object to draw on and a RuleSet defining
+ * DrawRunner takes a Graphics object to draw on and a RuleBasedFractal defining
  * a fractal, and using a MegaCanvas to store paint information it
  * performs the rendering of that fractal.
  *
  * Implements Runnable so that it can be run in a background thread.
  * Contains hooks to stop rendering with the stop() method.
  */
-class DrawRunner(graphics: Graphics, rules: RuleSet, width: Int, height: Int)
+class DrawRunner(graphics: Graphics, fractal: RuleBasedFractal, width: Int, height: Int)
         extends Runnable with PaintObserver {
 
   val canvas = new MegaCanvas(width, height, this)
   val brush = new InitiallyBlurryBrush(canvas)
  // val brush = new AntiAliasedPointBrush(canvas)
 
-  val SCALE = 0.2 * rules.scale
+  val SCALE = 0.2 * fractal.scale
   val (xaspect: Double, yaspect: Double) = if (height > width)
     (1.0, width.toDouble / height)
   else
@@ -71,7 +71,7 @@ class DrawRunner(graphics: Graphics, rules: RuleSet, width: Int, height: Int)
     val pos = Vector(0.0, 0.0)
     val color = Color.BLACK
 
-    loopit(new RuleSetRunStateMachine(rules).start, pos, color)
+    loopit(new RuleSetRunStateMachine(fractal).start, pos, color)
   }
 
   /**

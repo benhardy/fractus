@@ -33,7 +33,7 @@ object SwingUtil {
 /**
  * Swing GUI for the app.
  */
-class Fractus(var initFractalName:String, var rules:RuleSet, imgWidth:Int, imgHeight:Int) extends JFrame {
+class Fractus(var initFractalName:String, var rules:RuleBasedFractal, imgWidth:Int, imgHeight:Int) extends JFrame {
   import SwingUtil._
 
   System.out.println("new Fractus created @"+imgWidth+"x"+imgHeight)
@@ -82,7 +82,7 @@ class Fractus(var initFractalName:String, var rules:RuleSet, imgWidth:Int, imgHe
    * stop whatever we're doing and start drawing a new fractal with the given name
    */
   def startAfresh(name:String) = {
-    val rules = RuleSet find name
+    val rules = RuleBasedFractal find name
     drawRunner.stop()
     try {
       drawThread.interrupt()

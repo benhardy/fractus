@@ -52,4 +52,11 @@ object Colors {
       colorVector // it's all good!
     }
   }
+
+  def colorMerge2(from: Color, to:Color, howFar:Double):Color = {
+    val r = from.getRed  * (1-howFar) + to.getRed  * howFar
+    val g = from.getGreen* (1-howFar) + to.getGreen* howFar
+    val b = from.getBlue * (1-howFar) + to.getBlue * howFar
+    new Color( r toInt, g toInt, b toInt )
+  }
 }
