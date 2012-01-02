@@ -60,6 +60,7 @@ object Rule {
     def polar: RuleBuilder
     def cartesian: RuleBuilder
     def invertRadius: RuleBuilder
+    def complexSquared : RuleBuilder
     def sine: RuleBuilder
     def also(f: Vector2=>Vector2):RuleBuilder
     def inPolarSpace(f: PolarVector=>PolarVector):RuleBuilder
@@ -114,6 +115,10 @@ object Rule {
     }
     override def invertRadius = {
       b_transform = b_transform.combine(Transform.invertRadius)
+      this
+    }
+    override def complexSquared = {
+      b_transform = b_transform.combine(Transform.complexSquared)
       this
     }
     override def sine = {

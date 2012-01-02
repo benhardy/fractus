@@ -12,6 +12,7 @@ object Colors {
   val PURPLE = new Color(128,0,255)
   val CREAM = new Color(255,0xe0,0xc0)
   val BURGUNDY = new Color(0xff,0x40,0x80)
+  val DARK_GREEN = new Color(0x00,0x80,0x00)
 
 
   def colorMerge( from:Color, to:Color, howFar:Double) = {

@@ -29,7 +29,11 @@ object Examples extends (String=>Option[RuleBasedFractal]) {
 
   def weight(w:Double) : RuleBuilder = rule.weight(w)
 
-  val items:Map[String,RuleBasedFractal] = Map(
+  def getFractalNames = {
+    items.keySet.toArray.sorted
+  }
+
+  private val items:Map[String,RuleBasedFractal] = Map(
     "sierpinski" -> RuleBasedFractal(
       rule weight 1 color RED   also { _ * 0.5 + ( 1.0,  0.0) },
       rule weight 1 color GREEN also { _ * 0.5 + (-1.0, -1.0) },
@@ -151,16 +155,10 @@ object Examples extends (String=>Option[RuleBasedFractal]) {
     ), 1.5),
     "AlienBlueCheese" -> RuleBasedFractal(
       // THIS ONE IS THE ORIGINAL ALIEN BLUE CHEESE FRACTAL
-      weight(0.15).color(BLUE).colorWeight(0.3).also( _ + (2.0, 1.0) ),
-      weight(1).color(WHITE).colorWeight(0.07).also(
-        (in:Vector2) => {
-          val (x,y) = (in.x, in.y)
-          var r = sqrt(x*x + y*y)
-          var t = atan2(x, y)
-          r = 0.80 *r + 0.15;
-          t = t + Pi/4;
-          Vector(r*cos(t), r*sin(t))
-        }
+      weight(0.15).color(BLUE).colorWeight(0.3).translate(2.0, 1.0),
+      weight(1).color(WHITE).colorWeight(0.07).inPolarSpace(
+        (in:PolarVector) =>
+          PolarVector(0.80 * in.r + 0.15, in.t + (2*8*Pi/13) )
       )
     ),
     "Borfo" -> RuleBasedFractal(
@@ -177,6 +175,92 @@ object Examples extends (String=>Option[RuleBasedFractal]) {
           Vector(r*cos(t), r*sin(t))
         }
       )
+    ),
+    "taffy-1" -> RuleBasedFractal(
+      List(
+        weight(2).color(ORANGE).colorWeight(0.3).scale(0.9).translate(-0.2,-0.2),
+        weight(2).color(DARK_GREEN).colorWeight(0.1).scale(0.1,0.7).rotate(-60).translate(-1.3, 1),
+        weight(2).color(Colors.CREAM).colorWeight(0.2).polar
+      )
+    ),
+    "hazylines" -> RuleBasedFractal(
+      List(
+        weight(2).color(PURPLE).colorWeight(0.3).scale(-1,1).translate(-1,-1),
+        weight(2).color(DARK_GREEN).colorWeight(0.3).scale(0.01,0.9),
+        weight(2).color(RED).colorWeight(0.3).rotate(5),
+        weight(5).color(Colors.CREAM).colorWeight(0.3).polar.translate(-1.0,0.2)
+      )
+    ),
+    "purplerain" -> RuleBasedFractal(
+      List(
+        weight(2).color(PURPLE).colorWeight(0.3).scale(4).sine.scale(5),
+        weight(3).color(Colors.CREAM).colorWeight(0.3).polar.translate(-1.0,0.2)
+      )
+    ),
+    "purplerain2" -> ruleSetScaled(
+      List(
+        weight(2).color(PURPLE).colorWeight(0.3).cartesian.translate(-0.3,0.3).scale(0.97),
+        weight(3).color(Colors.CREAM).colorWeight(0.3).polar.rotate(5)
+      ),
+      0.5 // zoom out a bit
+    ),
+    "purple-brain" -> ruleSetScaled(
+      List(
+        weight(5).color(PURPLE).colorWeight(0.1).scale(0.6,0.8).rotate(30).translate(-1,0),
+        weight(1).color(Colors.CREAM).colorWeight(1).polar.invertRadius.scale(3),
+        weight(20).color(RED).colorWeight(0.0).scale(-1,1)
+      ),
+      1.0 // zoom out a bit
+    ),
+    "mlike-boundary" -> ruleSetScaled(    // makes a vaguely mandelbrot-set-boundary shape
+      List(
+        weight(1).color(RED).colorWeight(0.3).scale(0.333,0.333).translate(-1.333,0),
+        weight(1).color(Colors.CREAM).colorWeight(0.7).inPolarSpace {
+          (p:PolarVector) => PolarVector((p.r + 1) /2, p.t /2)
+        },
+        weight(1).color(Colors.CREAM).colorWeight(0.7).inPolarSpace {
+          (p:PolarVector) => PolarVector((p.r + 1) /2, Pi + p.t /2)
+        }
+      ),
+      1.0
+    ),
+    "mlike-boundary-2" -> ruleSetScaled(
+      List(
+        weight(5).color(YELLOW).colorWeight(0.3).scale(0.1).translate(-1.0,0),
+        weight(5).color(GREEN).colorWeight(0.3).sine,
+        weight(5).color(BLUE).colorWeight(0.3).polar,
+        weight(1).color(RED).colorWeight(0.3).complexSquared
+      ),
+      1.0 
+    ),
+    "filament-reactor" -> ruleSetScaled(
+      List(
+        weight(25).color(RED).colorWeight(0.3).scale(0.001,0.5).translate(-0.8,0),
+        weight(100).color(Colors.CREAM).colorWeight(0.3).polar,
+        weight(70).color(Colors.PURPLE).colorWeight(0.3).also(
+          (Z:Vector2) => {
+            val (real, imag) = (Z.x, Z.y)
+            val (r2,i2) = (real*real, imag*imag)
+            if (r2 > 10) {
+              (real/100-1.5, imag/100)
+            }
+            else {
+              Vector(r2-i2, 2*real*imag)
+            }
+          }
+        )
+      ),
+      1.0
+    ),
+    "filament-reactor-2" -> ruleSetScaled(
+      List(
+        //weight(5).color(RED).colorWeight(0.5).rotate(-5).scale(-0.5).translate(-1,-1),
+        weight(10).color(CREAM).colorWeight(0.2).polar.scale(0.6).translate(1,-0.5),
+        weight(10).color(RED).colorWeight(0.2).invertRadius,
+        //weight(50).color(BLACK).colorWeight(0.0).rotate(90),
+        weight(10).color(GREEN).colorWeight(0.2).scale(0.6).rotate(10).translate(-1,1)
+      ),
+      1
     ),
     "Squaresville" ->  new SquaresVille,
     "eggs" -> RuleBasedFractal(

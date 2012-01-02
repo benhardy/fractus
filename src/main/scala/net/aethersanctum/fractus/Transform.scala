@@ -114,6 +114,12 @@ object Transform {
 			Vector(in.x/r2, in.y/r2)
     }
   )
+  val complexSquared = Transform(
+    (Z:Vector2) => {
+      val (real,imag) = (Z.x, Z.y)
+      Vector(real*real - imag*imag, 2 * real * imag)
+    }
+  )
 
   val sine =  Transform(
     (in:Vector2) => Vector(sin(in.x), sin(in.y))

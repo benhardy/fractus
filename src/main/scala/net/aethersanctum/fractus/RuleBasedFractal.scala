@@ -51,6 +51,19 @@ class RandomSelectionRuleBasedFractal(rules:Array[Rule]) extends RuleBasedFracta
   override def nextIndex(currentState:RuleState):Int = defaultSelector.next
 }
 
+trait PickySelector {
+  def next(currentState:RuleState) : Int
+}
+
+class SelectiveRuleTransitionFractal(rules:Array[Rule],
+                                      pickySelector:PickySelector) extends RuleBasedFractal {
+  override def getRules = rules
+
+  val ruleSelector = pickySelector
+
+  override def nextIndex(currentState:RuleState) : Int = pickySelector.next(currentState)
+}
+
 object RuleBasedFractal {
   /**
    * Factory method for constructing a RuleBasedFractal from a variable length argument list of rules
@@ -65,13 +78,26 @@ object RuleBasedFractal {
   def apply(rules : Traversable[Rule]) : RuleBasedFractal = {
     new RandomSelectionRuleBasedFractal(rules.toArray[Rule])
   }
+  /**
+   * Factory method for constructing a RuleBasedFractal from a variable length argument list of rules
+   */
+  def apply(selector: PickySelector, rules : Rule*) : RuleBasedFractal = {
+    new SelectiveRuleTransitionFractal(rules.toArray[Rule], selector)
+  }
+
+  /**
+   * Factory method for constructing a RuleBasedFractal from a collection of rules
+   */
+  def apply(selector: PickySelector, rules : Traversable[Rule]) : RuleBasedFractal = {
+    new SelectiveRuleTransitionFractal(rules.toArray[Rule], selector)
+  }
 
   /**
    * Search for a RuleBasedFractal by name in the Examples.
    */
-  def find(name:String): RuleBasedFractal = {
+  def findByName(name:String): RuleBasedFractal = {
     Examples(name).getOrElse {
-      throw new IllegalArgumentException("couldn't find a rule by the name of "+name)
+      throw new IllegalArgumentException("couldn't findByName a rule by the name of "+name)
     }
   }
 }

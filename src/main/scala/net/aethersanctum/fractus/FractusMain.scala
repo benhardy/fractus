@@ -6,26 +6,32 @@ package net.aethersanctum.fractus
  */
 object FractusMain {
 
-    private val DEFAULT_IMAGE_WIDTH = 1000
-    private val DEFAULT_IMAGE_HEIGHT = 1000
+  private val DEFAULT_IMAGE_WIDTH = 1000
+  private val DEFAULT_IMAGE_HEIGHT = 1000
 
-    def main(argv:Array[String]) {
-        println("args supplied: " + argv.length)
-        if (argv.length != 1 && argv.length != 3) {
-            System.err.println("USAGE: fractus.sh FRACTALNAME [width height]")
-            System.exit(-1)
-        }
-        val fractalName = argv(0)
-        val rules = RuleBasedFractal find fractalName
+  def main(argv: Array[String]) {
+    checkArgumentListLength(argv)
+    val fractalName = argv(0)
 
-        val (iwidth, iheight) = if (argv.length == 3) {
-            (Integer parseInt argv(1), Integer parseInt argv(2))
-        } else {
-            (DEFAULT_IMAGE_WIDTH, DEFAULT_IMAGE_HEIGHT)
-        }
-        val mainwin = new Fractus(fractalName, rules, iwidth, iheight)
-        mainwin.pack()
-        mainwin setVisible true
-        mainwin.startThreads
+    val (width, height) = determineImageDimensions(argv)
+    val application = new FractusApp(width, height)
+    application.startDrawing(fractalName)
+  }
+
+  private def checkArgumentListLength(argv: Array[String]) {
+    println("args supplied: " + argv.length)
+    if (argv.length != 1 && argv.length != 3) {
+      System.err.println("USAGE: fractus.sh FRACTALNAME [width height]")
+      System.exit(-1)
     }
+  }
+
+  private def determineImageDimensions(argv: Array[String]): (Int, Int) = {
+    if (argv.length == 3) {
+      (Integer parseInt argv(1), Integer parseInt argv(2))
+    } else {
+      (DEFAULT_IMAGE_WIDTH, DEFAULT_IMAGE_HEIGHT)
+    }
+  }
+
 }

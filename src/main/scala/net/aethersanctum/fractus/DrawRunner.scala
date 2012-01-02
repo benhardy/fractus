@@ -29,12 +29,12 @@ trait PaintObserver {
 class DrawRunner(graphics: Graphics, fractal: RuleBasedFractal, width: Int, height: Int)
         extends Runnable with PaintObserver {
 
-  val canvas = new MegaCanvas(width, height, this)
-  val brush = new InitiallyBlurryBrush(canvas)
+  private val canvas = new MegaCanvas(width, height, this)
+  private val brush = new InitiallyBlurryBrush(canvas)
  // val brush = new AntiAliasedPointBrush(canvas)
 
   val SCALE = 0.2 * fractal.scale
-  val (xaspect: Double, yaspect: Double) = if (height > width)
+  private val (xaspect: Double, yaspect: Double) = if (height > width)
     (1.0, width.toDouble / height)
   else
     (height.toDouble / width, 1.0)
@@ -66,7 +66,7 @@ class DrawRunner(graphics: Graphics, fractal: RuleBasedFractal, width: Int, heig
     keepGoing.set(false)
   }
 
-  override def run() = {
+  override def run() {
     System.out.println("DrawRunner is running");
     val pos = Vector(0.0, 0.0)
     val color = Color.BLACK
