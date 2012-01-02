@@ -52,6 +52,8 @@ class DrawRunner(graphics: Graphics, fractal: RuleBasedFractal, width: Int, heig
    */
   private val roughPixelCount: AtomicLong = new AtomicLong(0L)
 
+  val COLOR_SCALING_FACTOR = 0.08
+
   /**
    * called every so often by the updater thread
    */
@@ -102,10 +104,6 @@ class DrawRunner(graphics: Graphics, fractal: RuleBasedFractal, width: Int, heig
       loopit(nextRuleState, pos, color, newPixelCount)
     }
   }
-
-  def black = Vector3.ORIGIN
-
-  val COLOR_SCALING_FACTOR = 0.08
 
   /**
    * Update a point on the display according to its corresponding PaintBucket after

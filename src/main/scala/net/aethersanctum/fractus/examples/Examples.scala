@@ -9,7 +9,7 @@ import net.aethersanctum.fractus.Transform._
 import net.aethersanctum.fractus._
 
 /**
- * Example fractal definitions, which can be looked up by name.
+ * Example fractal definitions, which can be looked up by fractalName.
  */
 object Examples extends (String => Option[RuleBasedFractal]) {
 

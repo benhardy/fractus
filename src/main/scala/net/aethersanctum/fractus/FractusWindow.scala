@@ -42,10 +42,8 @@ class FractusWindow(imgWidth: Int, imgHeight: Int, messageReceiver: GuiMessageRe
 
   def getDrawingCanvasGraphics = img2d
 
-  def getSaveableImage = img
-
   /**
-   * stop whatever we're doing and start drawing a new fractal with the given name
+   * stop whatever we're doing and start drawing a new fractal with the given fractalName
    */
   def blackenCanvas() {
     img2d.setColor(Color.BLACK)
@@ -94,7 +92,7 @@ class FractusWindow(imgWidth: Int, imgHeight: Int, messageReceiver: GuiMessageRe
   def createButtonPanel(countLabel: JLabel): JPanel = {
     val buttonPanel = new JPanel()
     buttonPanel.add(button("Save") {
-      messageReceiver.handleSaveMessage()
+      messageReceiver.handleSaveMessage(img)
     })
 
     buttonPanel.add(button("Refresh") {

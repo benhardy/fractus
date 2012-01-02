@@ -4,12 +4,13 @@ import java.lang.Thread._
 import java.lang.Thread
 import javax.imageio.ImageIO
 import java.io.File
+import java.awt.image.RenderedImage
 
 /**
  * Callbacks for messages from the GUI.
  */
 trait GuiMessageReceiver {
-  def handleSaveMessage()
+  def handleSaveMessage(image:RenderedImage)
 
   def handleQuitMessage()
 
@@ -57,15 +58,16 @@ class FractusApp(imageWidth: Int, imageHeight: Int) extends GuiMessageReceiver {
    * Contains a thread which after starting updates the display periodically
    */
   class RefreshTicker {
+    val REFRESH_INTERVAL_MILLIS = 1000
+    val TOTAL_IMAGE_PIXELS = (imageWidth * imageHeight)
     private var started = false
     private val thread = new Thread(new Runnable() {
       override def run() {
         println("Starting refresh ticker")
         while (true) {
-          sleep(1000)
-          drawSession.foreach {
-            session =>
-              val ratio = session.getPixelsDrawn.toDouble / (imageWidth * imageHeight)
+          sleep(REFRESH_INTERVAL_MILLIS)
+          drawSession.foreach { session =>
+              val ratio = session.getPixelsDrawn.toDouble / TOTAL_IMAGE_PIXELS
               window.updateCountLabel(" " + ratio)
           }
         }
@@ -86,25 +88,23 @@ class FractusApp(imageWidth: Int, imageHeight: Int) extends GuiMessageReceiver {
    * Stops whatever we're doing (if anything), finds next fractal to draw, and
    * sets up a new drawing session to run it.
    */
-  def startDrawing(name: String) {
+  def startDrawing(fractalName: String) {
     drawSession.foreach {
       _.stop()
     }
-
-    val fractal = RuleBasedFractal findByName name
     window.blackenCanvas()
 
-    drawSession = Some(new DrawSession(fractal))
-    drawSession.foreach {
-      _.start()
-    }
-    window.showFractalSelection(name)
+    val fractal = RuleBasedFractal findByName fractalName
+    val session = new DrawSession(fractal)
+    session.start()
+    drawSession = Some(session)
+    window.showFractalSelection(fractalName)
     refreshTicker.start()
   }
 
-  override def handleSaveMessage {
+  override def handleSaveMessage(image:RenderedImage) {
     println("Received Save Message")
-    ImageIO.write(window.getSaveableImage, "png", new File("fractus.png"))
+    ImageIO.write(image, "png", new File("fractus.png"))
   }
 
   override def handleQuitMessage {

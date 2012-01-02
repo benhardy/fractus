@@ -5,6 +5,7 @@ import org.scalatest.junit.JUnitRunner
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import java.awt.Color._
+
 /**
  */
 @RunWith(classOf[JUnitRunner])
