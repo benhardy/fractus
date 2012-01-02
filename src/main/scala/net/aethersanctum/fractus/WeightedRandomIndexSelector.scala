@@ -2,7 +2,6 @@ package net.aethersanctum.fractus
 
 import math.random
 import java.lang.{StringBuilder => jStringBuilder}
-import scala.collection.mutable.StringBuilder
 
 /**
  * Constructs a normalized array of weights, and allows you to select an index
@@ -17,44 +16,46 @@ import scala.collection.mutable.StringBuilder
  * then traverse the array of weights, adding each to a total until the total
  * is greater than the randomly selected number. The array index is returned.
  * <p>
- * The random number source can be altered for testing purposes.
+ * The random number source (selector) can be altered for testing purposes.
  */
-class WeightedRandomIndexSelector(rawWeights:Array[Double], selector: (()=>Double) = (() => random)) {
+class WeightedRandomIndexSelector(rawWeights: Array[Double], selector: (() => Double) = (() => random)) {
 
-	val tot:Double = rawWeights.sum
-  val weights = rawWeights.map { _ / tot }
-  println("Weights reset to " +  toString())
+  val tot: Double = rawWeights.sum
+  val weights = rawWeights.map {
+    _ / tot
+  }
+  println("Weights reset to " + toString())
 
-	/**
-	 * get the next index value
-	 */
-	def next:Int = {
-		val position: Double = selector()
-		var tot: Double = weights(0)
+  /**
+   * get the next index value
+   */
+  def next: Int = {
+    val position: Double = selector()
+    var tot: Double = weights(0)
     var t: Int = 0
-    while(position > tot && t<weights.length) {
+    while (position > tot && t < weights.length) {
       t = t + 1
       tot += weights(t)
     }
-		if (t<weights.length) t else weights.length-1;
-	}
-  
+    if (t < weights.length) t else weights.length - 1;
+  }
+
   override def toString = {
     weights.foldLeft(new scala.StringBuilder) {
-      (s:scala.StringBuilder, x:Double) => s append " " append x
+      (s: scala.StringBuilder, x: Double) => s append " " append x
       s
     }.toString()
   }
 }
 
 object WeightedRandomIndexSelector {
-	/**
-	 * builder class will extract weights from an array of T, as long as you provide an
-	 * extractor function that will extract the weight from an individual T
-	 */
+  /**
+   * builder class will extract weights from an array of T, as long as you provide an
+   * extractor function that will extract the weight from an individual T
+   */
 
-  def apply[T](items:Array[T])( f:(T => Double) ) = {
-    val weights =  items.map(f)  
+  def apply[T](items: Array[T])(f: (T => Double)) = {
+    val weights = items.map(f)
     new WeightedRandomIndexSelector(weights);
   }
 }

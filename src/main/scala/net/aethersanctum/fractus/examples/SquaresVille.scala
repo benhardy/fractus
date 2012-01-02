@@ -4,13 +4,12 @@ package net.aethersanctum.fractus.examples
 import net.aethersanctum.fractus._
 import net.aethersanctum.fractus.Rule._
 import java.awt.Color._
-import net.aethersanctum.fractus.Colors._
 import math._
 import net.aethersanctum.fractus.Transform._
 
 class SquaresVille extends RandomSelectionRuleBasedFractal(SquaresVille.rules) {
 
-  override def nextIndex(state:RuleState): Int = {
+  override def nextIndex(state: RuleState): Int = {
     state.current match {
       case 3 => 0
       case _ => super.nextIndex(state)

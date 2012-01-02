@@ -2,23 +2,22 @@ package net.aethersanctum.fractus.examples
 
 import net.aethersanctum.fractus.Rule._
 import java.awt.Color._
-import net.aethersanctum.fractus.Colors._
 import math._
-import net.aethersanctum.fractus.{RandomSelectionRuleBasedFractal, RuleState, Rule, RuleBasedFractal}
+import net.aethersanctum.fractus.{RandomSelectionRuleBasedFractal, RuleState}
 
 class Spongy extends RandomSelectionRuleBasedFractal(Array(
-      weight(1) color (RED) colorWeight (0.5) scale (1.0 / 3) translate(-1.5, 1.5),
-      weight(1) color (GREEN) colorWeight (0.5) scale (1.0 / 3) translate(0.0, 1.5),
-      weight(1) color (RED) colorWeight (0.5) scale (1.0 / 3) translate(1.5, 1.5),
+  weight(1) color (RED) colorWeight (0.5) scale (1.0 / 3) translate(-1.5, 1.5),
+  weight(1) color (GREEN) colorWeight (0.5) scale (1.0 / 3) translate(0.0, 1.5),
+  weight(1) color (RED) colorWeight (0.5) scale (1.0 / 3) translate(1.5, 1.5),
 
-      weight(1) color (GREEN) colorWeight (0.5) scale (1.0 / 3) translate(-1.5, 0.0),
-      weight(0) color (BLACK) colorWeight (0.5) scale (1.0 / 3) translate(0.0, 0.0),
-      weight(1) color (GREEN) colorWeight (0.5) scale (1.0 / 3) translate(1.5, 0.0),
+  weight(1) color (GREEN) colorWeight (0.5) scale (1.0 / 3) translate(-1.5, 0.0),
+  weight(0) color (BLACK) colorWeight (0.5) scale (1.0 / 3) translate(0.0, 0.0),
+  weight(1) color (GREEN) colorWeight (0.5) scale (1.0 / 3) translate(1.5, 0.0),
 
-      weight(1) color (RED) colorWeight (0.5) scale (1.0 / 3) translate(-1.5, -1.5),
-      weight(1) color (GREEN) colorWeight (0.5) scale (1.0 / 3) translate(0.0, -1.5),
-      weight(1) color (RED) colorWeight (0.5) scale (1.0 / 3) translate(1.5, -1.5)
-    ) ) {
+  weight(1) color (RED) colorWeight (0.5) scale (1.0 / 3) translate(-1.5, -1.5),
+  weight(1) color (GREEN) colorWeight (0.5) scale (1.0 / 3) translate(0.0, -1.5),
+  weight(1) color (RED) colorWeight (0.5) scale (1.0 / 3) translate(1.5, -1.5)
+)) {
 
 
   /**randomly choose something from the array of rule indices */
@@ -27,7 +26,7 @@ class Spongy extends RandomSelectionRuleBasedFractal(Array(
     n(p)
   }
 
-  override def nextIndex(state:RuleState): Int = {
+  override def nextIndex(state: RuleState): Int = {
     var ok = false
     var default = -1
     while (!ok) {

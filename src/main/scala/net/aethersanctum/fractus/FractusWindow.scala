@@ -1,12 +1,9 @@
 package net.aethersanctum.fractus
 
 import java.awt.image.BufferedImage
-import java.io.{File}
-import javax.imageio.ImageIO
-import java.awt.event.{ActionListener, ActionEvent}
+import java.awt.event.ActionEvent
 import examples.Examples
 import java.awt.{Color, BorderLayout, Graphics, Dimension}
-import java.lang.Thread.sleep
 
 import util.SwingUtil._
 import javax.swing._
@@ -14,36 +11,37 @@ import javax.swing._
 /**
  * Swing GUI for the app. Delegates handling of user messages to messageReceiver.
  */
-class FractusWindow(imgWidth:Int, imgHeight:Int, messageReceiver:GuiMessageReceiver) extends JFrame {
+class FractusWindow(imgWidth: Int, imgHeight: Int, messageReceiver: GuiMessageReceiver) extends JFrame {
 
-  System.out.println("new Fractus created @"+imgWidth+"x"+imgHeight)
+  System.out.println("new Fractus created @" + imgWidth + "x" + imgHeight)
 
-  setPreferredSize(new Dimension(imgWidth+50, imgHeight+50))
+  setPreferredSize(new Dimension(imgWidth + 50, imgHeight + 50))
   setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
 
-  val img = new BufferedImage( imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB )
-  val img2d = img.createGraphics
+  private val img = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB)
+  private val img2d = img.createGraphics
 
-  val drawPanel = createDrawPanel
-  val imageSelector = createImageSelector
+  private val drawPanel = createDrawPanel
+  private val imageSelector = createImageSelector
 
-  val countLabel = new JLabel("")
-  val buttonPanel = createButtonPanel(countLabel)
+  private val countLabel = new JLabel("")
+  private val buttonPanel = createButtonPanel(countLabel)
 
-  val scroller = new JScrollPane( drawPanel )
-  scroller.setMinimumSize(new Dimension(400,400))
+  private val scroller = new JScrollPane(drawPanel)
+  scroller.setMinimumSize(new Dimension(400, 400))
 
-  getContentPane.setLayout( new BorderLayout() )
-  getContentPane.add( scroller, BorderLayout.CENTER )
-  getContentPane.add( buttonPanel, BorderLayout.SOUTH )
+  getContentPane.setLayout(new BorderLayout())
+  getContentPane.add(scroller, BorderLayout.CENTER)
+  getContentPane.add(buttonPanel, BorderLayout.SOUTH)
 
 
-  def updateCountLabel(label:String) {
+  def updateCountLabel(label: String) {
     countLabel.setText(label)
     drawPanel.repaint()
   }
 
   def getDrawingCanvasGraphics = img2d
+
   def getSaveableImage = img
 
   /**
@@ -55,7 +53,11 @@ class FractusWindow(imgWidth:Int, imgHeight:Int, messageReceiver:GuiMessageRecei
     drawPanel.repaint();
   }
 
-  def createDrawPanel : JPanel = {
+  def showFractalSelection(name:String) = {
+    imageSelector.setSelectedItem(name)
+  }
+
+  def createDrawPanel: JPanel = {
     new JPanel {
       val myPrefSize = new Dimension(imgWidth, imgHeight)
 
@@ -75,7 +77,7 @@ class FractusWindow(imgWidth:Int, imgHeight:Int, messageReceiver:GuiMessageRecei
   }
 
 
-  def createImageSelector : JComboBox = {
+  def createImageSelector: JComboBox = {
     val selector = new JComboBox()
 
     Examples.getFractalNames.foreach {
@@ -89,7 +91,7 @@ class FractusWindow(imgWidth:Int, imgHeight:Int, messageReceiver:GuiMessageRecei
     selector
   }
 
-  def createButtonPanel(countLabel:JLabel) : JPanel = {
+  def createButtonPanel(countLabel: JLabel): JPanel = {
     val buttonPanel = new JPanel()
     buttonPanel.add(button("Save") {
       messageReceiver.handleSaveMessage()

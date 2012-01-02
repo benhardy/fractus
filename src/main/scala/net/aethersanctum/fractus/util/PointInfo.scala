@@ -4,7 +4,8 @@ package net.aethersanctum.fractus.util
 sealed abstract case class PointInfo
 
 case class Unknown extends PointInfo
-         /*
+
+/*
 sealed abstract case class Known extends PointInfo
 
 case class Assumed(assumption:Known) extends PointInfo   // might be redundant

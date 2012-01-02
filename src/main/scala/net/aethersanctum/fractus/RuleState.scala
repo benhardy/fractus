@@ -24,7 +24,7 @@ trait RuleState {
    * fetch the next selected Rule and subsequent RuleState.
    * you should then use the subsequent RuleState for the next call to next() (and so on)
    */
-  def next:(Rule,  RuleState)
+  def next: (Rule, RuleState)
 }
 
 /**
@@ -34,19 +34,19 @@ trait RuleState {
  * You can then call next() on that RuleState to get the first selected rule and
  * the next RuleState, which in turn should be used (and so on).
  */
-class RuleSetRunStateMachine(val fractal:RuleBasedFractal) {
+class RuleSetRunStateMachine(val fractal: RuleBasedFractal) {
 
   /**
    * get the initial state
    */
   def start: RuleState = new StateImpl
 
-  class StateImpl(val current:Int = -1, val previous:Int = -1) extends RuleState {
+  class StateImpl(val current: Int = -1, val previous: Int = -1) extends RuleState {
     /**
      * the current fractal's RuleBasedFractal determines what rule is to be used next by
      * supplying the index number of the next one.
      */
-    def next:(Rule, RuleState) = {
+    def next: (Rule, RuleState) = {
       val next = fractal.nextIndex(this)
       val new_previous = current
       val new_current = next
@@ -55,5 +55,6 @@ class RuleSetRunStateMachine(val fractal:RuleBasedFractal) {
       (rule, new_state)
     }
   }
+
 }
 

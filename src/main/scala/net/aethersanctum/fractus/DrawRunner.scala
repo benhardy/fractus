@@ -4,10 +4,8 @@ import java.awt.Color
 import java.awt.Graphics
 import math._
 import net.aethersanctum.fractus.Colors._
-import net.aethersanctum.fractus.Vector._
 
 import annotation.tailrec
-import java.awt.image.{BufferedImage}
 import java.util.concurrent.atomic.{AtomicLong, AtomicBoolean}
 
 /**
@@ -15,7 +13,7 @@ import java.util.concurrent.atomic.{AtomicLong, AtomicBoolean}
  * to update the visible display accordingly.
  */
 trait PaintObserver {
-  def updateDisplayPoint(x:Int, y:Int, bucket:PaintBucket) : Boolean
+  def updateDisplayPoint(x: Int, y: Int, bucket: PaintBucket): Boolean
 }
 
 /**
@@ -27,11 +25,11 @@ trait PaintObserver {
  * Contains hooks to stop rendering with the stop() method.
  */
 class DrawRunner(graphics: Graphics, fractal: RuleBasedFractal, width: Int, height: Int)
-        extends Runnable with PaintObserver {
+  extends Runnable with PaintObserver {
 
   private val canvas = new MegaCanvas(width, height, this)
   private val brush = new InitiallyBlurryBrush(canvas)
- // val brush = new AntiAliasedPointBrush(canvas)
+  // val brush = new AntiAliasedPointBrush(canvas)
 
   val SCALE = 0.2 * fractal.scale
   private val (xaspect: Double, yaspect: Double) = if (height > width)
@@ -80,14 +78,14 @@ class DrawRunner(graphics: Graphics, fractal: RuleBasedFractal, width: Int, heig
    * position and color, and paint that spot with the current brush.
    */
   @tailrec
-  final def loopit(ruleState:RuleState, oldPos: Vector2, oldColor: Color, pixelCount:Long = 0L) {
+  final def loopit(ruleState: RuleState, oldPos: Vector2, oldColor: Color, pixelCount: Long = 0L) {
     if (!keepGoing.get()) {
       println("DrawRunner got a stop signal")
     }
     else {
       val (rule, nextRuleState) = ruleState.next
       val (pos, color) = rule(oldPos, oldColor)
-      val xm = (width  * (0.5 + SCALE * pos.x * xaspect)).toInt
+      val xm = (width * (0.5 + SCALE * pos.x * xaspect)).toInt
       val ym = (height * (0.5 - SCALE * pos.y * yaspect)).toInt
       val newPixelCount = if (canvas.containsPoint(xm, ym)) {
         brush.paint(xm, ym, color)
@@ -98,7 +96,7 @@ class DrawRunner(graphics: Graphics, fractal: RuleBasedFractal, width: Int, heig
       }
       // update the rough pixel count infrequently (it's atomic)
       // when least significant 16 bits are all 0.
-      if (newPixelCount.toShort == 0)  {
+      if (newPixelCount.toShort == 0) {
         roughPixelCount.set(newPixelCount)
       }
       loopit(nextRuleState, pos, color, newPixelCount)
@@ -112,10 +110,10 @@ class DrawRunner(graphics: Graphics, fractal: RuleBasedFractal, width: Int, heig
   /**
    * Update a point on the display according to its corresponding PaintBucket after
    * that got rendered. This is a callback called by MegaCanvas.paint().
-   * 
+   *
    * Performs logarithmic scaling of color based on the amount of paint in the bucket.
    * Furthermore, colors are attenuated to fit within RGB range, and preserve saturation and hue.
-   * 
+   *
    * @return true if point is in visible canvas area, false otherwise
    */
   override def updateDisplayPoint(xi: Int, yi: Int, bucket: PaintBucket): Boolean = {

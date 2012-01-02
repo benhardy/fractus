@@ -21,11 +21,11 @@ class PaintBucket {
    * @param color is what paint we're using
    * @param intensity is how much paint's being added (0 to 1)
    */
-  def paint(color:Color, intensity:Double) {
-    red +=   color.getRed * intensity
+  def paint(color: Color, intensity: Double) {
+    red += color.getRed * intensity
     green += color.getGreen * intensity
-    blue +=  color.getBlue * intensity
-    hitCount +=  intensity
+    blue += color.getBlue * intensity
+    hitCount += intensity
   }
 
   /**

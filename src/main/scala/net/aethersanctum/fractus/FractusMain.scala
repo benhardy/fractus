@@ -2,7 +2,7 @@ package net.aethersanctum.fractus
 
 /**
  * Main entry point to the application. Deals with command-line parameters,
- * instantiates GUI, kicks off the rendering.
+ * instantiates main application and starts it.
  */
 object FractusMain {
 
