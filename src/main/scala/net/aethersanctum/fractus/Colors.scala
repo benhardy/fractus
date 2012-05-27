@@ -12,12 +12,11 @@ object Colors {
   val BURGUNDY = new Color(0xff, 0x40, 0x80)
   val DARK_GREEN = new Color(0x00, 0x80, 0x00)
 
+  implicit def color2vector(c: Color) = Vector(c getRed, c getGreen, c getBlue)
 
   def colorMerge(from: Color, to: Color, howFar: Double) = {
     from + ((to - from) * howFar)
   }
-
-  implicit def color2vector(c: Color) = Vector(c getRed, c getGreen, c getBlue)
 
   implicit def vector2color(v: Vector3) = {
     val max = v.max

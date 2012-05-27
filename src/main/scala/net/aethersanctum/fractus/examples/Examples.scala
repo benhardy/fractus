@@ -1,12 +1,14 @@
 package net.aethersanctum.fractus.examples
 
-import java.awt.Color._
-import net.aethersanctum.fractus.Colors._
-import math._
 import net.aethersanctum.fractus.Vector._
 import net.aethersanctum.fractus.Rule._
 import net.aethersanctum.fractus.Transform._
 import net.aethersanctum.fractus._
+import math._
+import net.aethersanctum.fractus.PolarVector._
+import net.aethersanctum.fractus.Vector2._
+import java.awt.Color._
+import net.aethersanctum.fractus.Colors._
 
 /**
  * Example fractal definitions, which can be looked up by fractalName.
@@ -39,15 +41,9 @@ object Examples extends (String => Option[RuleBasedFractal]) {
 
   private val items: Map[String, RuleBasedFractal] = Map(
     "sierpinski" -> RuleBasedFractal(
-      rule weight 1 color RED also {
-        _ * 0.5 +(1.0, 0.0)
-      },
-      rule weight 1 color GREEN also {
-        _ * 0.5 +(-1.0, -1.0)
-      },
-      rule weight 1 color BLUE also {
-        _ * 0.5 +(-1.0, 1.0)
-      }
+      rule weight 1 color RED scale 0.5 translate(-1.0, -1.0),
+      rule weight 1 color GREEN scale 0.5 translate(-1.0, 1.0),
+      rule weight 1 color WHITE scale 0.5 translate(1.0, 0.0)
     ),
     "spirally" -> RuleBasedFractal(
       rule weight 30 color WHITE colorWeight 0.05 scale 0.99 rotate 70,
@@ -289,6 +285,37 @@ object Examples extends (String => Option[RuleBasedFractal]) {
     "polar1" -> RuleBasedFractal(
       weight(1).color(GREEN).colorWeight(0.5).polar.scale(-0.5, 0.25).translate(2, 2),
       weight(4).color(GREEN).colorWeight(0.5).also(_ + Vector(0, -1))
+    ),
+    "polar2" -> RuleBasedFractal(
+      weight(1).color(RED).colorWeight(1).scale(1,0.01).translate(0,-3),
+      weight(3).color(GREEN).colorWeight(0.3).polar.scale(2).translate(1, -1),
+      weight(1).color(ORANGE).colorWeight(0.3).invertRadius.scale(2).translate(-1.5,-0.3),
+      weight(5) color CREAM colorWeight 0.3 scale 0.8 rotate 80 translate(0.5,0.5)
+    ),
+    "polar3" -> RuleBasedFractal(
+
+      weight(2).color(ORANGE).colorWeight(0.3).rotate(180).invertRadius.scale(3).translate(-1.5,-0.3),
+      weight(3) color CREAM colorWeight 0.3 rotate 82 scale 0.7 translate(1.2,0) ,
+      weight(1).color(BLUE).colorWeight(0.7).polar.scale(2).translate(1, -1)
+    ),
+    "polar4" -> RuleBasedFractal(
+      weight(2).color(ORANGE).colorWeight(0.3).rotate(72).invertRadius.scale(4),
+      weight(3) color CREAM colorWeight 0.3 rotate 10 translate(5,0) scale 0.9 ,
+      weight(1).color(PURPLE).colorWeight(0.3).polar.scale(-2).translate(0, -1)
+    ),
+    "polar5" -> RuleBasedFractal(
+      //   weight(2).color(ORANGE).colorWeight(0.3).rotate(72).invertRadius.scale(4),
+      weight(3) color CREAM colorWeight 0.6 scale 0.25 translate(-1,1),
+      weight(2).color(PURPLE).colorWeight(0.6).polar.translate(1,0.5),
+      weight(50).color(PURPLE).colorWeight(0.0).rotate(72)
+    ),
+    "polar6" -> RuleBasedFractal(
+      weight(4).color(ORANGE).colorWeight(0.3).invertRadius.scale(1).translate(-0.25,-2.0),
+      weight(1) color RED colorWeight 0.6 scale -0.25 translate(-4,0),
+      weight(2).color(PURPLE).colorWeight(0.5).polar.scale(2, 4.0).translate(1,0),
+      weight(19).color(CREAM).colorWeight(0.1).inPolarSpace(
+        (pv:PolarVector) => PolarVector((pv.r + 1)/2, pv.t+1)
+      )
     ),
     "starkle" -> new Starkle,
     "spongy2" -> new Spongy

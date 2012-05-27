@@ -116,7 +116,8 @@ object Transform {
   )
   val cartesian = Transform(
     (in: Vector2) => {
-      val (r, t) = (in.x, in.y)
+      val r = in.x
+      val t = in.y
       Vector(r * cos(t), r * sin(t))
     }
   )
@@ -128,7 +129,8 @@ object Transform {
   )
   val complexSquared = Transform(
     (Z: Vector2) => {
-      val (real, imag) = (Z.x, Z.y)
+      val real = Z.x
+      val imag = Z.y
       Vector(real * real - imag * imag, 2 * real * imag)
     }
   )

@@ -31,7 +31,7 @@ class Spongy extends RandomSelectionRuleBasedFractal(Array(
     var default = -1
     while (!ok) {
       default = super.nextIndex(state)
-      // figure out which combinations of previous, current and next rules we don't want
+      // figure out which combinations of previous, current and next rules we don'index want
       ok = (state.previous, state.current, default) match {
         case (1, 7, 0) => false
         case (7, 7, 0) => false

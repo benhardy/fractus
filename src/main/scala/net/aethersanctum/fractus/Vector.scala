@@ -82,6 +82,8 @@ final class Vector2(a: Double, b: Double) extends Vector[Vector2] {
       }
     }
   }
+  
+  override def toString = "<%.3f,%.3f>".format(a, b)
 }
 
 object Vector2 {
@@ -153,6 +155,7 @@ final class Vector3(a: Double, b: Double, c: Double) extends Vector[Vector3] {
       }
     }
   }
+  override def toString = "<%.3f,%.3f,%.3f>".format(a, b, c)
 }
 
 object Vector3 {

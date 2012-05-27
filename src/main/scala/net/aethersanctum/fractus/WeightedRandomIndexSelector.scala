@@ -1,7 +1,7 @@
 package net.aethersanctum.fractus
 
 import math.random
-import java.lang.{StringBuilder => jStringBuilder}
+import annotation.tailrec
 
 /**
  * Constructs a normalized array of weights, and allows you to select an index
@@ -18,31 +18,34 @@ import java.lang.{StringBuilder => jStringBuilder}
  * <p>
  * The random number source (selector) can be altered for testing purposes.
  */
-class WeightedRandomIndexSelector(rawWeights: Array[Double], selector: (() => Double) = (() => random)) {
+class WeightedRandomIndexSelector(rawWeights: Array[Double]) {
 
   val tot: Double = rawWeights.sum
-  val weights = rawWeights.map {
-    _ / tot
-  }
+  val weights = rawWeights.map { _ / tot }
   println("Weights reset to " + toString())
+
+  @tailrec
+  final def measurePosition(position:Double, index: Int, tot: Double): Int = {
+    if (position <= tot || index >= weights.length) {
+      index
+    } else {
+      measurePosition(position, index + 1, tot + weights(index + 1))
+    }
+  }
+
+  def selectPosition : Double = random
 
   /**
    * get the next index value
    */
   def next: Int = {
-    val position: Double = selector()
-    var tot: Double = weights(0)
-    var t: Int = 0
-    while (position > tot && t < weights.length) {
-      t = t + 1
-      tot += weights(t)
-    }
-    if (t < weights.length) t else weights.length - 1;
+    val t = measurePosition(selectPosition, 0, weights(0))
+    math.min(t, weights.length - 1)
   }
 
   override def toString = {
-    weights.foldLeft(new scala.StringBuilder) {
-      (s: scala.StringBuilder, x: Double) => s append " " append x
+    weights.foldLeft(new StringBuilder) {
+      (s: StringBuilder, x: Double) => s append " " append x
       s
     }.toString()
   }

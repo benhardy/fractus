@@ -24,11 +24,11 @@
 			</includes>
 		</fileSet>
 	</fileSets>	
-	<binaries>
+	<!--binaries>
 		<dependencySets>
 			<dependencySet>
 				<outputDirectory>/lib</outputDirectory>
 			</dependencySet>
 		</dependencySets>
-	</binaries>
+	</binaries-->
 </assembly>
