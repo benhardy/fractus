@@ -2,12 +2,19 @@ package net.aethersanctum.fractus
 
 import java.awt.Color
 
+trait Canvas {
+  def hits(x: Int, y: Int): Double
+
+  def paint(x: Int, y: Int, c: Color, intensity: Double)
+
+}
+
 /**
  *  MegaCanvas remembers how we've been distributing the paint.
  *  It's a big two-dimensional array of paint buckets.
  */
 class MegaCanvas(width: Int, height: Int,
-                 paintObserver: PaintObserver) {
+                 paintObserver: PaintObserver) extends Canvas {
 
   println("Initializing MegaCanvas " + width + "x" + height)
 

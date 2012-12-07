@@ -7,6 +7,7 @@ import examples.Examples
  * the appearance of an IFS/ChaosGame type fractal's appearance.
  */
 abstract class RuleBasedFractal {
+  def name : String
 
   /**
    * retrieve all the rules at once
@@ -30,12 +31,13 @@ abstract class RuleBasedFractal {
    */
   def scale: Double = 1
 
+
 }
 
 /**
  * default implementation of RuleBasedFractal includes random rule selection
  */
-class RandomSelectionRuleBasedFractal(rules: Array[Rule]) extends RuleBasedFractal {
+class RandomSelectionRuleBasedFractal(val name:String, rules: Array[Rule]) extends RuleBasedFractal {
 
   override def getRules = rules
 
@@ -58,7 +60,7 @@ trait PickySelector {
   def next(currentState: RuleState): Int
 }
 
-class SelectiveRuleTransitionFractal(rules: Array[Rule],
+class SelectiveRuleTransitionFractal(val name:String, rules: Array[Rule],
                                      pickySelector: PickySelector) extends RuleBasedFractal {
   override def getRules = rules
 
@@ -71,37 +73,31 @@ object RuleBasedFractal {
   /**
    * Factory method for constructing a RuleBasedFractal from a variable length argument list of rules
    */
-  def apply(rules: Rule*): RuleBasedFractal = {
-    new RandomSelectionRuleBasedFractal(rules.toArray[Rule])
+  def apply(name:String, rules: Rule*): RuleBasedFractal = {
+    new RandomSelectionRuleBasedFractal(name, rules.toArray[Rule])
   }
 
   /**
    * Factory method for constructing a RuleBasedFractal from a collection of rules
    */
-  def apply(rules: Traversable[Rule]): RuleBasedFractal = {
-    new RandomSelectionRuleBasedFractal(rules.toArray[Rule])
+  def apply(name:String, rules: Traversable[Rule]): RuleBasedFractal = {
+    new RandomSelectionRuleBasedFractal(name, rules.toArray[Rule])
   }
 
   /**
    * Factory method for constructing a RuleBasedFractal from a variable length argument list of rules
    */
-  def apply(selector: PickySelector, rules: Rule*): RuleBasedFractal = {
-    new SelectiveRuleTransitionFractal(rules.toArray[Rule], selector)
+  def apply(name:String, selector: PickySelector, rules: Rule*): RuleBasedFractal = {
+    new SelectiveRuleTransitionFractal(name, rules.toArray[Rule], selector)
   }
 
   /**
    * Factory method for constructing a RuleBasedFractal from a collection of rules
    */
-  def apply(selector: PickySelector, rules: Traversable[Rule]): RuleBasedFractal = {
-    new SelectiveRuleTransitionFractal(rules.toArray[Rule], selector)
+  def apply(name:String, selector: PickySelector, rules: Traversable[Rule]): RuleBasedFractal = {
+    new SelectiveRuleTransitionFractal(name, rules.toArray[Rule], selector)
   }
 
-  /**
-   * Search for a RuleBasedFractal by name in the Examples.
-   */
-  def findByName(name: String): RuleBasedFractal = {
-    Examples(name).getOrElse {
-      throw new IllegalArgumentException("couldn't findByName a rule by the name of " + name)
-    }
-  }
+  implicit def toNamedPair(r:RuleBasedFractal): (String, RuleBasedFractal) = (r.name, r)
+
 }

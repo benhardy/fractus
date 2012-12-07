@@ -1,5 +1,6 @@
 package net.aethersanctum.fractus
 
+import examples.Examples
 import java.lang.Thread._
 import java.lang.Thread
 import javax.imageio.ImageIO
@@ -88,17 +89,16 @@ class FractusApp(imageWidth: Int, imageHeight: Int) extends GuiMessageReceiver {
    * Stops whatever we're doing (if anything), finds next fractal to draw, and
    * sets up a new drawing session to run it.
    */
-  def startDrawing(fractalName: String) {
+  def startDrawing(fractal: RuleBasedFractal) {
     drawSession.foreach {
       _.stop()
     }
     window.blackenCanvas()
 
-    val fractal = RuleBasedFractal findByName fractalName
     val session = new DrawSession(fractal)
     session.start()
     drawSession = Some(session)
-    window.showFractalSelection(fractalName)
+    window.showFractalSelection(fractal.name)
     refreshTicker.start()
   }
 
@@ -114,6 +114,8 @@ class FractusApp(imageWidth: Int, imageHeight: Int) extends GuiMessageReceiver {
 
   override def handleNewFractalMessage(fractalName: String) {
     println("Received New Fractal Message:" + fractalName)
-    startDrawing(fractalName)
+    startDrawing(Examples(fractalName).getOrElse{
+      throw new IllegalStateException("i got told to draw something i don't know")
+    })
   }
 }

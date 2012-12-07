@@ -5,7 +5,7 @@ import java.awt.Color._
 import net.aethersanctum.fractus.Colors._
 import net.aethersanctum.fractus._
 
-class Starkle extends RandomSelectionRuleBasedFractal(Starkle.rules) {
+class Starkle extends RandomSelectionRuleBasedFractal("starkle", Starkle.rules) {
 
   override def nextIndex(state: RuleState): Int = {
     state.current match {

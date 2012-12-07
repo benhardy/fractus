@@ -28,7 +28,7 @@ class DrawRunner(graphics: Graphics, fractal: RuleBasedFractal, width: Int, heig
   extends Runnable with PaintObserver {
 
   private val canvas = new MegaCanvas(width, height, this)
-  private val brush = new InitiallyBlurryBrush(canvas)
+  private val brush : Brush = new InitiallyBlurryBrush(canvas)
   // val brush = new AntiAliasedPointBrush(canvas)
 
   val SCALE = 0.2 * fractal.scale
@@ -45,7 +45,7 @@ class DrawRunner(graphics: Graphics, fractal: RuleBasedFractal, width: Int, heig
    * Flag which when set to false by the gui calls to stop() will stop the main loop in loopit().
    * AtomicBoolean since the AWT thread will be writing to this.
    */
-  private val keepGoing: AtomicBoolean = new AtomicBoolean(true)
+  private val keepGoing = new AtomicBoolean(true)
   /**
    * A rough count of how many pixels have been written. Updated periodically by loopit().
    * AtomicLong since updater thread will be reading this.

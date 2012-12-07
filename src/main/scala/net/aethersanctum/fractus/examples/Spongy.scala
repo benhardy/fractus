@@ -5,7 +5,7 @@ import java.awt.Color._
 import math._
 import net.aethersanctum.fractus.{RandomSelectionRuleBasedFractal, RuleState}
 
-class Spongy extends RandomSelectionRuleBasedFractal(Array(
+class Spongy extends RandomSelectionRuleBasedFractal("spongy", Array(
   weight(1) color (RED) colorWeight (0.5) scale (1.0 / 3) translate(-1.5, 1.5),
   weight(1) color (GREEN) colorWeight (0.5) scale (1.0 / 3) translate(0.0, 1.5),
   weight(1) color (RED) colorWeight (0.5) scale (1.0 / 3) translate(1.5, 1.5),

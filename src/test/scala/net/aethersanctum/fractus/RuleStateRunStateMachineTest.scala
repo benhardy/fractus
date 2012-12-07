@@ -18,7 +18,7 @@ class RuleStateRunStateMachineTest extends FunSuite with ShouldMatchers {
         weight(1).translate(1,0).color(RED), 
         weight(1).scale(3.0).color(GREEN)
       )
-
+      override def name = "fred"
       override def getRules : Array[Rule] = { rules }
 
       override def nextIndex(x:RuleState) = x.current match {

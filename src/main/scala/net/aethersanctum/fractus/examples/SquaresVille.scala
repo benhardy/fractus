@@ -7,7 +7,7 @@ import java.awt.Color._
 import math._
 import net.aethersanctum.fractus.Transform._
 
-class SquaresVille extends RandomSelectionRuleBasedFractal(SquaresVille.rules) {
+class SquaresVille extends RandomSelectionRuleBasedFractal("squaresville", SquaresVille.rules) {
 
   override def nextIndex(state: RuleState): Int = {
     state.current match {

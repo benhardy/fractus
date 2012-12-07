@@ -1,6 +1,7 @@
 package net.aethersanctum.fractus
 
 import com.google.common.annotations.VisibleForTesting
+import examples.Examples
 
 /**
  * Main entry point to the application. Deals with command-line parameters,
@@ -14,10 +15,15 @@ object FractusMain {
   def main(argv: Array[String]) {
     checkArgumentListLength(argv)
     val fractalName = argv(0)
-
-    val (width, height) = determineImageDimensions(argv)
-    val application = new FractusApp(width, height)
-    application.startDrawing(fractalName)
+    Examples(fractalName) map {
+      (fractal: RuleBasedFractal) =>
+        val (width, height) = determineImageDimensions(argv)
+        val application = new FractusApp(width, height)
+        application startDrawing fractal
+    } getOrElse {
+      System.err.println("No fractal found with that name.")
+      System.exit(-1)
+    }
   }
 
   @VisibleForTesting
