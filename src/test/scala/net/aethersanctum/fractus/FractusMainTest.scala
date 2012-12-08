@@ -8,11 +8,9 @@ import org.scalatest.matchers.ShouldMatchers
 @RunWith(classOf[JUnitRunner])
 class FractusMainTest extends FunSuite with ShouldMatchers {
 
-  test("main app should complain without command line parameters") {
+  test("main app should proceed without command line parameters") {
     val args = Array[String]()
-    intercept[IllegalArgumentException] {
-      FractusMain.checkArgumentListLength(args)
-    }
+    FractusMain.checkArgumentListLength(args)
   }
 
   test("main app should accept just fractal fractalName command line parameter") {
