@@ -141,5 +141,6 @@
                 </configuration>
             </plugin>
         </plugins>
+
     </reporting>
 </project>

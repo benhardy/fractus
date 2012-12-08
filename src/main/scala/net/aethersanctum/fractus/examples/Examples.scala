@@ -40,6 +40,15 @@ object Examples extends (String => Option[RuleBasedFractal]) {
     items.keySet.toArray.sorted
   }
 
+  private val random = new java.util.Random()
+
+  def randomSelection = {
+    val ordered = items.values.toArray
+    val pos = (random.nextInt() & 0xFFFF) % ordered.length
+    ordered(pos)
+  }
+
+
   private val items: Map[String, RuleBasedFractal] = Map(
     RuleBasedFractal("sierpinski",
       rule weight 1 color RED scale 0.5 translate(-1.0, -1.0),

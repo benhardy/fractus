@@ -48,7 +48,7 @@ class FractusWindow(imgWidth: Int, imgHeight: Int, messageReceiver: GuiMessageRe
   def blackenCanvas() {
     img2d.setColor(Color.BLACK)
     img2d.fillRect(0, 0, imgWidth, imgHeight)
-    drawPanel.repaint();
+    drawPanel.repaint()
   }
 
   def showFractalSelection(name:String) = {

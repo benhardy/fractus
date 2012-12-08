@@ -14,7 +14,10 @@ object FractusMain {
 
   def main(argv: Array[String]) {
     checkArgumentListLength(argv)
-    val fractalName = argv(0)
+    val fractalName = if (argv.length > 0)
+      argv(0)
+    else
+      Examples.randomSelection.name
     Examples(fractalName) map {
       (fractal: RuleBasedFractal) =>
         val (width, height) = determineImageDimensions(argv)
@@ -30,8 +33,8 @@ object FractusMain {
   private[fractus]
   def checkArgumentListLength(argv: Array[String]) {
     println("args supplied: " + argv.length)
-    if (argv.length != 1 && argv.length != 3) {
-      throw new IllegalArgumentException("USAGE: fractus.sh FRACTALNAME [width height]")
+    if (! Set(0,1,3).contains(argv.length) ) {
+      throw new IllegalArgumentException("USAGE: fractus.sh [FRACTALNAME [width height]]")
     }
   }
 

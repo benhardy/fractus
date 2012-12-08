@@ -1,7 +1,7 @@
 package net.aethersanctum.fractus
 
 import java.awt.Color
-import Colors.colorMerge2
+import Colors.fastColorMerge
 
 /**
  * RuleBasedFractals are built out of rules. Each rule defines transformations
@@ -32,7 +32,7 @@ trait Rule extends (Vector2 => Vector2) {
   def colorWeight: Double
 
   def apply(p: Vector2, c: Color): (Vector2, Color) = {
-    (transform(p), colorMerge2(c, color, colorWeight))
+    (transform(p), fastColorMerge(c, color, colorWeight))
   }
 
   override def apply(p: Vector2) = {
@@ -40,7 +40,7 @@ trait Rule extends (Vector2 => Vector2) {
   }
 
   def apply(c: Color): Color = {
-    colorMerge2(c, color, colorWeight)
+    fastColorMerge(c, color, colorWeight)
   }
 
   def weightIsLess(w: Double) = (weight < w)

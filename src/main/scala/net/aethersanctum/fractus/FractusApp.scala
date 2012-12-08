@@ -1,11 +1,11 @@
 package net.aethersanctum.fractus
 
 import examples.Examples
-import java.lang.Thread._
-import java.lang.Thread
 import javax.imageio.ImageIO
 import java.io.File
 import java.awt.image.RenderedImage
+import java.util.concurrent.{TimeUnit, Callable, ScheduledExecutorService, Executors}
+
 
 /**
  * Callbacks for messages from the GUI.
@@ -50,7 +50,7 @@ class FractusApp(imageWidth: Int, imageHeight: Int) extends GuiMessageReceiver {
       }
     }
 
-    def getPixelsDrawn = drawRunner.getPixelCount
+    def pixelsDrawn = drawRunner.pixelsDrawn
   }
 
   private var drawSession: Option[DrawSession] = None
@@ -58,28 +58,21 @@ class FractusApp(imageWidth: Int, imageHeight: Int) extends GuiMessageReceiver {
   /**
    * Contains a thread which after starting updates the display periodically
    */
-  class RefreshTicker {
+  class RefreshTicker extends Runnable {
     val REFRESH_INTERVAL_MILLIS = 1000
     val TOTAL_IMAGE_PIXELS = (imageWidth * imageHeight)
-    private var started = false
-    private val thread = new Thread(new Runnable() {
-      override def run() {
-        println("Starting refresh ticker")
-        while (true) {
-          sleep(REFRESH_INTERVAL_MILLIS)
-          drawSession.foreach { session =>
-              val ratio = session.getPixelsDrawn.toDouble / TOTAL_IMAGE_PIXELS
-              window.updateCountLabel(" " + ratio)
-          }
-        }
+    private val executor =  Executors newScheduledThreadPool 1
+
+    override def run() {
+      drawSession.foreach { session =>
+          val ratio = session.pixelsDrawn.toDouble / TOTAL_IMAGE_PIXELS
+          window.updateCountLabel(" " + ratio)
       }
-    });
+    }
 
     def start() {
-      if (!started) {
-        thread.start()
-        started = true
-      }
+      println("Starting refresh ticker")
+      executor.scheduleAtFixedRate(this, REFRESH_INTERVAL_MILLIS, REFRESH_INTERVAL_MILLIS, TimeUnit.MILLISECONDS)
     }
   }
 

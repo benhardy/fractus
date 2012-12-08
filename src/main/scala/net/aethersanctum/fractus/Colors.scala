@@ -12,49 +12,62 @@ object Colors {
   val BURGUNDY = new Color(0xff, 0x40, 0x80)
   val DARK_GREEN = new Color(0x00, 0x80, 0x00)
 
-  implicit def color2vector(c: Color) = Vector(c getRed, c getGreen, c getBlue)
+  /**
+   * provide implicit conversions of Colors to Vectors
+   */
+  implicit def color2vector(c: Color) = Vector(c.getRed, c.getGreen, c.getBlue)
 
+  /**
+   * Provide implicit conversions of vector to colors.
+   * <p>
+   * Values out of RGB space are scaled back into it to preserve
+   * hue and saturation.
+   */
+  implicit def vector2color(v: Vector3) = {
+    val adjusted = attenuated(v)
+    def rgbConstrain(pos:Double) : Int = {
+      val v = pos.toInt
+      if (v > 255) 255 else if (v < 0) 0 else v
+    }
+    new Color(rgbConstrain(adjusted.x), rgbConstrain(adjusted.y), rgbConstrain(adjusted.z))
+  }
+
+  /**
+   * Pick a color between two colors.
+   * <p>
+   * If the two colors "from" and "to" are treated as points in 3-dimensional
+   * RGB space, then on the line between these two points, select a third point
+   * at the proportional distance to the "to" point from the "from" point, where
+   * that proportion "howfar" is between 0 and 1.
+   */
   def colorMerge(from: Color, to: Color, howFar: Double) = {
     from + ((to - from) * howFar)
   }
 
-  implicit def vector2color(v: Vector3) = {
-    val max = v.max
-    val adjusted = if (max > 255) {
-      //println("adjusting scale by "+(255.0/max))
-      v * (255.0 / max)
-    } else if (v.min < 0) {
-      Vector(0, 0, 0)
-    } else {
-      v
-    }
-    val r = adjusted.x.toInt
-    val g = adjusted.y.toInt
-    val b = adjusted.z.toInt
-    new Color(
-      if (r > 255) 255 else if (r < 0) 0 else r,
-      if (g > 255) 255 else if (g < 0) 0 else g,
-      if (b > 255) 255 else if (b < 0) 0 else b)
-  }
-
-
-  def attenuateColor(colorVector: Vector3): Vector3 = {
-    val highest = colorVector.max
-    if (highest > 255) {
-      colorVector * (255.0 / highest)
-    }
-    else if (colorVector.min < 0) {
-      Vector3.ORIGIN
-    }
-    else {
-      colorVector // it's all good!
-    }
-  }
-
-  def colorMerge2(from: Color, to: Color, howFar: Double): Color = {
+  /**
+   * This slightly faster version of colorMerge avoids intermediary
+   * creation of Vector3 objects.
+   */
+  def fastColorMerge(from: Color, to: Color, howFar: Double): Color = {
     val r = from.getRed * (1 - howFar) + to.getRed * howFar
     val g = from.getGreen * (1 - howFar) + to.getGreen * howFar
     val b = from.getBlue * (1 - howFar) + to.getBlue * howFar
     new Color(r toInt, g toInt, b toInt)
   }
+
+  /**
+   * Squish a color vector into RGB space constraints (max value 255)
+   * while preserving hue and saturation.
+   */
+  def attenuated(color: Vector3) = {
+    val max = color.max
+    if (max > 255) {
+      color * (255.0 / max)
+    } else if (color.min < 0) {
+      Vector3.ORIGIN
+    } else {
+      color
+    }
+  }
+
 }

@@ -2,9 +2,23 @@ package net.aethersanctum.fractus
 
 import java.awt.Color
 
+/**
+ * General drawing surface
+ */
 trait Canvas {
+  /**
+   * Do the supplied coordinates correspond to a point on this Canvas?
+   */
+  def containsPoint(x: Int, y: Int): Boolean
+
+  /**
+   * How much paint is at this point on this Canvas?
+   */
   def hits(x: Int, y: Int): Double
 
+  /**
+   * Put some paint on this point on the Canvas?
+   */
   def paint(x: Int, y: Int, c: Color, intensity: Double)
 
 }
@@ -12,6 +26,9 @@ trait Canvas {
 /**
  *  MegaCanvas remembers how we've been distributing the paint.
  *  It's a big two-dimensional array of paint buckets.
+ *  <p>
+ *  It also notifies an observer of paint events, this is used
+ *  to update the display.
  */
 class MegaCanvas(width: Int, height: Int,
                  paintObserver: PaintObserver) extends Canvas {

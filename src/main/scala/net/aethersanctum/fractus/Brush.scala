@@ -14,7 +14,7 @@ sealed trait Brush {
 /**
  * dumbly draw a single point at the requested pixel coordinates
  */
-case class IntegerPointBrush(canvas: MegaCanvas) extends Brush {
+case class IntegerPointBrush(canvas: Canvas) extends Brush {
   override def paint(x: Double, y: Double, c: Color) {
     canvas.paint(x.toInt, y.toInt, c, 1.00)
   }
@@ -67,7 +67,8 @@ case class InitiallyBlurryBrush(canvas: Canvas) extends Brush {
   }
 
   /**
-   * Given a center position and a stripe thickness,
+   * Working in one dimension, given a center position and a stripe
+   * thickness,
    * @return a range of pixels which appear in the stripe and a
    *         function which given a pixel number in that range,
    *         returns the fraction of the pixel which the stripe
@@ -90,7 +91,7 @@ case class InitiallyBlurryBrush(canvas: Canvas) extends Brush {
     def fatness(pos:Int) = {
       if (pos > startPixel) {
         if (pos < endPixel) {
-          1.0
+          1.0  // most likely case
         } else if (pos == endPixel) {
           endStub
         } else {
@@ -105,17 +106,27 @@ case class InitiallyBlurryBrush(canvas: Canvas) extends Brush {
     (Range(startPixel, endPixel), fatness)
   }
 
-  override def paint(xp: Double, yp: Double, color: Color) {
-    val brushWidth = splatter(canvas.hits(xp.toInt, yp.toInt))
-    val strokeFade = 1.0 / (brushWidth * brushWidth)
-    val (xrange,xstripe) = stripeGenerator(xp, brushWidth)
-    val (yrange,ystripe) = stripeGenerator(yp, brushWidth)
+  /**
+   * This brush's paint method decides how widely to paint based
+   * on how much paint is already at the center of the brush stroke.
+   * <p>
+   * A constant amount of paint is spread out over the area of the
+   * stroke.
+   * <p>
+   * This results in an initially fuzzy buildup of paint which gets
+   * sharper as it accumulates more strokes via calls to paint().
+   */
+  override def paint(xCenter: Double, yCenter: Double, color: Color) {
+    val strokeWidth = splatter(canvas.hits(xCenter.toInt, yCenter.toInt))
+    val strokeFade = 1.0 / (strokeWidth * strokeWidth)
+    val (xRange, xStripe) = stripeGenerator(xCenter, strokeWidth)
+    val (yRange, yStripe) = stripeGenerator(yCenter, strokeWidth)
     for(
-        yi <- yrange;
-        xi <- xrange
+        yPixel <- yRange;
+        xPixel <- xRange
     ) {
-      val stroke = xstripe(xi) * ystripe(yi) * strokeFade
-      canvas.paint(xi, yi, color, stroke)
+      val stroke = xStripe(xPixel) * yStripe(yPixel) * strokeFade
+      canvas.paint(xPixel, yPixel, color, stroke)
     }
   }
 

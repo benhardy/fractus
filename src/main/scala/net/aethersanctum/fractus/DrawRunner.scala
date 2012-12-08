@@ -27,9 +27,8 @@ trait PaintObserver {
 class DrawRunner(graphics: Graphics, fractal: RuleBasedFractal, width: Int, height: Int)
   extends Runnable with PaintObserver {
 
-  private val canvas = new MegaCanvas(width, height, this)
+  private val canvas : Canvas = new MegaCanvas(width, height, this)
   private val brush : Brush = new InitiallyBlurryBrush(canvas)
-  // val brush = new AntiAliasedPointBrush(canvas)
 
   val SCALE = 0.2 * fractal.scale
   private val (xaspect: Double, yaspect: Double) = if (height > width)
@@ -46,6 +45,7 @@ class DrawRunner(graphics: Graphics, fractal: RuleBasedFractal, width: Int, heig
    * AtomicBoolean since the AWT thread will be writing to this.
    */
   private val keepGoing = new AtomicBoolean(true)
+
   /**
    * A rough count of how many pixels have been written. Updated periodically by loopit().
    * AtomicLong since updater thread will be reading this.
@@ -57,7 +57,7 @@ class DrawRunner(graphics: Graphics, fractal: RuleBasedFractal, width: Int, heig
   /**
    * called every so often by the updater thread
    */
-  def getPixelCount = roughPixelCount.get()
+  def pixelsDrawn = roughPixelCount.get()
 
   /**
    * called by GUI thread when we want to shut this DrawRunner down
@@ -67,7 +67,7 @@ class DrawRunner(graphics: Graphics, fractal: RuleBasedFractal, width: Int, heig
   }
 
   override def run() {
-    System.out.println("DrawRunner is running");
+    System.out.println("DrawRunner is running")
     val pos = Vector(0.0, 0.0)
     val color = Color.BLACK
 
@@ -116,10 +116,10 @@ class DrawRunner(graphics: Graphics, fractal: RuleBasedFractal, width: Int, heig
    */
   override def updateDisplayPoint(xi: Int, yi: Int, bucket: PaintBucket): Boolean = {
     if (xi >= 0 && yi >= 0 && xi < width && yi < height) {
-      val hits = bucket.hits;
+      val hits = bucket.hits
       val colorScale = COLOR_SCALING_FACTOR * log(hits)
       val colorVector = bucket.colorVector * (colorScale / hits)
-      val fixedColor: Vector3 = attenuateColor(colorVector)
+      val fixedColor: Vector3 = attenuated(colorVector)
       graphics.setColor(fixedColor)
       graphics.drawRect(xi, yi, 0, 0)
       true
