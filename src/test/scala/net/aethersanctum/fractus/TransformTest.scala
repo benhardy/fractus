@@ -160,7 +160,7 @@ class TransformTest extends FunSuite with ShouldMatchers {
     result should be (closeEnoughTo(expected))
   }
   test("non-affine combined polar") {
-    val start = Vector(0, Math.Pi-2)
+    val start = Vector(0, math.Pi-2)
     val combo = SHIFT.polar
     val result = combo(start)
     val expected = Vector(3.2969083, 1.262627)

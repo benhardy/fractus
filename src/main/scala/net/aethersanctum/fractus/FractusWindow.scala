@@ -74,16 +74,12 @@ class FractusWindow(imgWidth: Int, imgHeight: Int, messageReceiver: GuiMessageRe
     }
   }
 
+  def createImageSelector: JComboBox[String] = {
+    val selector = new JComboBox[String](Examples.getFractalNames)
 
-  def createImageSelector: JComboBox = {
-    val selector = new JComboBox()
-
-    Examples.getFractalNames.foreach {
-      selector addItem _
-    }
-    selector.addActionListener {
-      (e: ActionEvent) =>
-        val newFractalName = e.getSource.asInstanceOf[JComboBox].getSelectedItem.asInstanceOf[String]
+    selector.addActionListener { (event:ActionEvent) =>
+        val source = event.getSource.asInstanceOf[JComboBox[String]]
+        val newFractalName = source.getItemAt(source.getSelectedIndex)
         messageReceiver.handleNewFractalMessage(newFractalName)
     }
     selector

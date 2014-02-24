@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-SCALA_VERSION=2.9.2
+SCALA_VERSION=2.10.3
 MAVEN_REPO=$HOME/.m2/repository
 SCALA_LIB=$MAVEN_REPO/org/scala-lang/scala-library/$SCALA_VERSION/scala-library-$SCALA_VERSION.jar
 CLASSPATH=$PWD/target/classes:$SCALA_LIB

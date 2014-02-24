@@ -1,6 +1,6 @@
 package net.aethersanctum.fractus
 
-import math.random
+import math.{min, random}
 import annotation.tailrec
 
 /**
@@ -18,18 +18,18 @@ import annotation.tailrec
  * <p>
  * The random number source (selector) can be altered for testing purposes.
  */
-class WeightedRandomIndexSelector(rawWeights: Array[Double]) {
+class WeightedRandomIndexSelector(rawWeights: IndexedSeq[Double]) {
 
   val tot: Double = rawWeights.sum
   val weights = rawWeights.map { _ / tot }
   println("Weights reset to " + toString())
 
   @tailrec
-  final def measurePosition(position:Double, index: Int, tot: Double): Int = {
-    if (position <= tot || index >= weights.length) {
+  final def measurePosition(position:Double, index: Int, total: Double): Int = {
+    if (position <= total || index >= weights.length) {
       index
     } else {
-      measurePosition(position, index + 1, tot + weights(index + 1))
+      measurePosition(position, index + 1, total + weights(index + 1))
     }
   }
 
@@ -40,15 +40,10 @@ class WeightedRandomIndexSelector(rawWeights: Array[Double]) {
    */
   def next: Int = {
     val t = measurePosition(selectPosition, 0, weights(0))
-    math.min(t, weights.length - 1)
+    min(t, weights.length - 1)
   }
 
-  override def toString = {
-    weights.foldLeft(new StringBuilder) {
-      (s: StringBuilder, x: Double) => s append " " append x
-      s
-    }.toString()
-  }
+  override def toString = weights.mkString(" ")
 }
 
 object WeightedRandomIndexSelector {
@@ -57,8 +52,8 @@ object WeightedRandomIndexSelector {
    * extractor function that will extract the weight from an individual T
    */
 
-  def apply[T](items: Array[T])(f: (T => Double)) = {
+  def apply[T](items: IndexedSeq[T])(f: (T => Double)) = {
     val weights = items.map(f)
-    new WeightedRandomIndexSelector(weights);
+    new WeightedRandomIndexSelector(weights)
   }
 }
