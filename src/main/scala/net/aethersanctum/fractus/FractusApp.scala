@@ -62,11 +62,13 @@ class FractusApp(imageWidth: Int, imageHeight: Int) extends GuiMessageReceiver {
     val REFRESH_INTERVAL_MILLIS = 1000
     val TOTAL_IMAGE_PIXELS = (imageWidth * imageHeight)
     private val executor =  Executors newScheduledThreadPool 1
-
+    var timer = 0
     override def run() {
       drawSession.foreach { session =>
+          timer = timer + 1
           val ratio = session.pixelsDrawn.toDouble / TOTAL_IMAGE_PIXELS
-          window.updateCountLabel(" " + ratio)
+          val rate = ratio / timer
+          window.updateCountLabel("%1.1f total, rate %.1f/sec".format(ratio, rate))
       }
     }
 
