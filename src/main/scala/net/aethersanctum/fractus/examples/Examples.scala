@@ -213,8 +213,12 @@ object Examples extends (String => Option[RuleBasedFractal]) {
   )
   val purpleRain = RuleBasedFractal("purplerain",
     List(
-      weight(2).color(PURPLE).colorWeight(0.3).scale(4).sine.scale(5),
-      weight(3).color(Colors.CREAM).colorWeight(0.3).polar.translate(-1.0, 0.2)
+      weight(2).color(PURPLE).colorWeight(0.3).rotate(10).translate(2.0, 1.0).
+              scale(4).sine.scale(5).
+            translate(-2.0, -1.0).rotate(-10),
+      weight(6.5).color(Colors.CREAM).colorWeight(0.3).rotate(10).
+              translate(2.0, 1.0).polar.
+            translate(-3.0, -0.8).rotate(-10)
     )
   )
   val purpleRain2 = ruleSetScaled("purplerain2",
