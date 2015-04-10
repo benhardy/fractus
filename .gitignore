@@ -2,6 +2,7 @@ target
 *.png
 *.jpg
 *.iml
+.idea/
 .classpath
 .project
 bin
