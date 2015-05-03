@@ -1,18 +1,16 @@
 package net.aethersanctum.fractus
 
-import examples.Examples
-
 /**
  * RuleBasedFractal encapsulates a group of rules which define a
  * the appearance of an IFS/ChaosGame type fractal's appearance.
  */
-abstract class RuleBasedFractal {
+trait RuleBasedFractal {
   def name : String
 
   /**
    * retrieve all the rules at once
    */
-  def getRules: Array[Rule]
+  def rules: Array[Rule]
 
   /**
    * override nextIndex if you want to specify more complex rule selection
@@ -21,83 +19,60 @@ abstract class RuleBasedFractal {
    */
   def nextIndex(currentState: RuleState): Int
 
-  /**
-   * For any given RuleBasedFractal we should be able to look up a rule by its index number.
-   */
-  def apply(index: Int): Rule = getRules(index)
-
-  /**
-   * by default image scale is 1, but you can override this if you want
-   */
-  def scale: Double = 1
-
-
+  def scale: Double
 }
 
 /**
- * default implementation of RuleBasedFractal includes random rule selection
+ * by default, rules in a ruleset are selected randomly skewed by the weight of each rule.
  */
-class RandomSelectionRuleBasedFractal(val name:String, rules: Array[Rule]) extends RuleBasedFractal {
+abstract class PartRandom extends RuleBasedFractal {
 
-  override def getRules = rules
+  val NO_CUSTOM: Int = -1
 
-  /**
-   * by default, rules in a ruleset are selected randomly skewed by the weight of each rule.
-   */
-  val defaultSelector = WeightedRandomIndexSelector(rules) {
-    _.weight
+  def customTransition(state: RuleState): Int = NO_CUSTOM
+
+  final override def nextIndex(state: RuleState): Int = {
+    val custom = customTransition(state)
+    if (custom == NO_CUSTOM)
+      randomSelector.next
+    else
+      custom
   }
 
+  def scale = 1
+
   /**
-   * override nextIndex if you want to specify more complex rule selection
-   * behavior than just random. the default selector ignores the current
-   * state of the runner.
+   * needs to be lazy because rules might not be initialized before
    */
-  override def nextIndex(currentState: RuleState): Int = defaultSelector.next
+  private lazy val randomSelector = WeightedRandomIndexSelector(rules)
 }
 
-trait PickySelector {
-  def next(currentState: RuleState): Int
-}
-
-class SelectiveRuleTransitionFractal(val name:String, rules: Array[Rule],
-                                     pickySelector: PickySelector) extends RuleBasedFractal {
-  override def getRules = rules
-
-  val ruleSelector = pickySelector
-
-  override def nextIndex(currentState: RuleState): Int = pickySelector.next(currentState)
-}
+/**
+ * default implementation of RuleBasedFractal includes
+ * 1. always random rule selection
+ * 2. name and rules passed by constructor
+ */
+case class AlwaysRandom(name: String,
+                       rules: Array[Rule],
+                       override val scale: Double = 1) extends PartRandom
 
 object RuleBasedFractal {
   /**
    * Factory method for constructing a RuleBasedFractal from a variable length argument list of rules
    */
   def apply(name:String, rules: Rule*): RuleBasedFractal = {
-    new RandomSelectionRuleBasedFractal(name, rules.toArray[Rule])
+    AlwaysRandom(name, rules.toArray[Rule])
+  }
+  def apply(name:String, weight:Double, rules: Rule*): RuleBasedFractal = {
+    AlwaysRandom(name, rules.toArray[Rule], weight)
   }
 
   /**
    * Factory method for constructing a RuleBasedFractal from a collection of rules
    */
   def apply(name:String, rules: Traversable[Rule]): RuleBasedFractal = {
-    new RandomSelectionRuleBasedFractal(name, rules.toArray[Rule])
-  }
-
-  /**
-   * Factory method for constructing a RuleBasedFractal from a variable length argument list of rules
-   */
-  def apply(name:String, selector: PickySelector, rules: Rule*): RuleBasedFractal = {
-    new SelectiveRuleTransitionFractal(name, rules.toArray[Rule], selector)
-  }
-
-  /**
-   * Factory method for constructing a RuleBasedFractal from a collection of rules
-   */
-  def apply(name:String, selector: PickySelector, rules: Traversable[Rule]): RuleBasedFractal = {
-    new SelectiveRuleTransitionFractal(name, rules.toArray[Rule], selector)
+    AlwaysRandom(name, rules.toArray[Rule])
   }
 
   implicit def toNamedPair(r:RuleBasedFractal): (String, RuleBasedFractal) = (r.name, r)
-
 }

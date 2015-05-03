@@ -1,88 +1,62 @@
 package net.aethersanctum.fractus.examples
 
-import net.aethersanctum.fractus.Rule._
 import java.awt.Color._
 import math._
-import net.aethersanctum.fractus.{RandomSelectionRuleBasedFractal, RuleState}
-
-class Spongy extends RandomSelectionRuleBasedFractal("spongy", Array(
-  weight(1) color (RED) colorWeight (0.5) scale (1.0 / 3) translate(-1.5, 1.5),
-  weight(1) color (GREEN) colorWeight (0.5) scale (1.0 / 3) translate(0.0, 1.5),
-  weight(1) color (RED) colorWeight (0.5) scale (1.0 / 3) translate(1.5, 1.5),
-
-  weight(1) color (GREEN) colorWeight (0.5) scale (1.0 / 3) translate(-1.5, 0.0),
-  weight(0) color (BLACK) colorWeight (0.5) scale (1.0 / 3) translate(0.0, 0.0),
-  weight(1) color (GREEN) colorWeight (0.5) scale (1.0 / 3) translate(1.5, 0.0),
-
-  weight(1) color (RED) colorWeight (0.5) scale (1.0 / 3) translate(-1.5, -1.5),
-  weight(1) color (GREEN) colorWeight (0.5) scale (1.0 / 3) translate(0.0, -1.5),
-  weight(1) color (RED) colorWeight (0.5) scale (1.0 / 3) translate(1.5, -1.5)
-)) {
+import net.aethersanctum.fractus.{Rule, PartRandom, RuleState}
+import net.aethersanctum.fractus.Rule._
 
 
-  /**randomly choose something from the array of rule indices */
-  def allow(n: Array[Int]) = {
-    val p = (random * n.length).toInt
-    n(p)
+object Spongy extends PartRandom {
+
+  override val name = "spongy"
+
+  private val third = 1.0 / 3
+
+  override val rules = Array[Rule](
+    weight(1) color RED colorWeight 0.5 scale third translate(-1.5, 1.5),
+    weight(1) color GREEN colorWeight 0.5 scale third translate(0.0, 1.5),
+    weight(1) color RED colorWeight 0.5 scale third translate(1.5, 1.5),
+
+    weight(1) color GREEN colorWeight 0.5 scale third translate(-1.5, 0.0),
+    weight(0) color BLACK colorWeight 0.5 scale third translate(0.0, 0.0),
+    weight(1) color GREEN colorWeight 0.5 scale third translate(1.5, 0.0),
+
+    weight(1) color RED colorWeight 0.5 scale third translate(-1.5, -1.5),
+    weight(1) color GREEN colorWeight 0.5 scale third translate(0.0, -1.5),
+    weight(1) color RED colorWeight 0.5 scale third translate(1.5, -1.5)
+  )
+
+  val disallowedTransitions: Map[RuleState, Set[Int]] = Map(
+    RuleState(1,1) -> Set(3,5,6,7,8),
+    RuleState(1,7) -> Set(0,1,2,3,5),
+    RuleState(7,7) -> Set(0,1,2,3,5),
+    RuleState(7,1) -> Set(3,5,6,7,8),
+    RuleState(3,3) -> Set(1,2,5,7,8),
+    RuleState(3,5) -> Set(0,1,3,6,7),
+    RuleState(5,5) -> Set(0,3,1,6,7),
+    RuleState(5,3) -> Set(1,2,5,7,8)
+  )
+
+  def disallowed(state:RuleState, next:Int) = {
+    disallowedTransitions.get(state).exists(set => set.contains(next))
   }
 
-  override def nextIndex(state: RuleState): Int = {
-    var ok = false
-    var default = -1
-    while (!ok) {
-      default = super.nextIndex(state)
-      // figure out which combinations of previous, current and next rules we don'index want
-      ok = (state.previous, state.current, default) match {
-        case (1, 7, 0) => false
-        case (7, 7, 0) => false
-        case (3, 5, 0) => false
-        case (5, 5, 0) => false
+  val possibleCombinations: Seq[(RuleState,Int)] = for {
+    previous <- 0 until rules.length
+    current <- 0 until rules.length
+    next <- 0 until rules.length
+    key <- List(RuleState(previous, current)) if !disallowed(key, next)
+  } yield (key, next)
 
-        case (1, 7, 1) => false
-        case (7, 7, 1) => false
-        case (3, 3, 1) => false
-        case (5, 3, 1) => false
-        case (3, 5, 1) => false
-        case (5, 5, 1) => false
+  val emptyMap: Map[RuleState, List[Int]] = Map()
 
-        case (1, 7, 2) => false
-        case (7, 7, 2) => false
-        case (3, 3, 2) => false
-        case (5, 3, 2) => false
+  val allowedTransitions: Map[RuleState, List[Int]] = possibleCombinations.foldLeft(emptyMap) {
+    case (result, (state, next)) =>
+      result.updated(state, next :: result.getOrElse(state, Nil))
+  }
 
-        case (1, 1, 3) => false
-        case (1, 7, 3) => false
-        case (7, 1, 3) => false
-        case (7, 7, 3) => false
-        case (3, 5, 3) => false
-        case (5, 5, 3) => false
-
-        case (1, 1, 5) => false
-        case (1, 7, 5) => false
-        case (7, 1, 5) => false
-        case (7, 7, 5) => false
-        case (5, 3, 5) => false
-        case (3, 3, 5) => false
-
-        case (1, 1, 6) => false
-        case (7, 1, 6) => false
-        case (3, 5, 6) => false
-        case (5, 5, 6) => false
-
-        case (1, 1, 7) => false
-        case (7, 1, 7) => false
-        case (3, 3, 7) => false
-        case (5, 3, 7) => false
-        case (3, 5, 7) => false
-        case (5, 5, 7) => false
-
-        case (1, 1, 8) => false
-        case (7, 1, 8) => false
-        case (3, 3, 8) => false
-        case (5, 3, 8) => false
-        case _ => true
-      }
-    }
-    default
+  override def customTransition(state: RuleState): Int = {
+    val possible = allowedTransitions(state)
+    possible((random * possible.length).toInt)
   }
 }

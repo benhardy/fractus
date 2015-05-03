@@ -7,19 +7,20 @@ import java.awt.Color._
 import math._
 import net.aethersanctum.fractus.Transform._
 
-class SquaresVille extends RandomSelectionRuleBasedFractal("squaresville", SquaresVille.rules) {
+object SquaresVille extends PartRandom {
 
-  override def nextIndex(state: RuleState): Int = {
+  override val name = "squaresville"
+
+  override def customTransition(state: RuleState): Int = {
     state.current match {
       case 3 => 0
-      case _ => super.nextIndex(state)
+      case _ => NO_CUSTOM
     }
   }
-}
 
-object SquaresVille {
   val GRIDSCALE = 0.2
-  val rules = Array[Rule](
+
+  override val rules = Array[Rule](
     // draw a box
     rule.weight(1).color(RED).colorWeight(0.8).transform((v: Vector2) =>
       new Vector2(sin(v.x * 371 + v.y * 503 + 1), sin(v.x * 529 + v.y * 447 + 3))

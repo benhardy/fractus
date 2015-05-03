@@ -70,8 +70,7 @@ class DrawRunner(graphics: Graphics, fractal: RuleBasedFractal, width: Int, heig
     System.out.println("DrawRunner is running")
     val pos = Vector(0.0, 0.0)
     val color = Color.BLACK
-
-    loopit(new RuleSetRunStateMachine(fractal).start, pos, color)
+    loopit(RuleState.INITIAL, pos, color)
   }
 
   /**
@@ -85,7 +84,10 @@ class DrawRunner(graphics: Graphics, fractal: RuleBasedFractal, width: Int, heig
       println("DrawRunner got a stop signal")
     }
     else {
-      val (rule, nextRuleState) = ruleState.next
+      val nextIndex = fractal.nextIndex(ruleState)
+      val rule = fractal.rules(nextIndex)
+      val new_state = RuleState(current = nextIndex, previous = ruleState.current)
+
       val (pos, color) = rule(oldPos, oldColor)
       val xm = (width * (0.5 + SCALE * pos.x * xaspect)).toInt
       val ym = (height * (0.5 - SCALE * pos.y * yaspect)).toInt
@@ -101,7 +103,7 @@ class DrawRunner(graphics: Graphics, fractal: RuleBasedFractal, width: Int, heig
       if (newPixelCount.toShort == 0) {
         roughPixelCount.set(newPixelCount)
       }
-      loopit(nextRuleState, pos, color, newPixelCount)
+      loopit(new_state, pos, color, newPixelCount)
     }
   }
 

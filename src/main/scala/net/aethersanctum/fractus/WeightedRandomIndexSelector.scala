@@ -52,8 +52,8 @@ object WeightedRandomIndexSelector {
    * extractor function that will extract the weight from an individual T
    */
 
-  def apply[T](items: IndexedSeq[T])(f: (T => Double)) = {
-    val weights = items.map(f)
+  def apply(items: IndexedSeq[Rule]) = {
+    val weights = items.map(_.weight)
     new WeightedRandomIndexSelector(weights)
   }
 }
