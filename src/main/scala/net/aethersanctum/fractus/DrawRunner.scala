@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.{AtomicLong, AtomicBoolean}
  * to update the visible display accordingly.
  */
 trait PaintObserver {
-  def updateDisplayPoint(x: Int, y: Int, bucket: PaintBucket): Boolean
+  def updateDisplayPoint(x: Int, y: Int, red: Double, green:Double, blue:Double, hits:Double): Boolean
 }
 
 /**
@@ -114,12 +114,29 @@ class DrawRunner(graphics: Graphics, fractal: RuleBasedFractal, width: Int, heig
    *
    * @return true if point is in visible canvas area, false otherwise
    */
-  override def updateDisplayPoint(xi: Int, yi: Int, bucket: PaintBucket): Boolean = {
+  override def updateDisplayPoint(xi: Int, yi: Int, red: Double, green:Double, blue:Double, hits:Double): Boolean = {
     if (xi >= 0 && yi >= 0 && xi < width && yi < height) {
-      val hits = bucket.hits
       val colorScale = COLOR_SCALING_FACTOR * log(hits)
-      val colorVector = bucket.colorVector * (colorScale / hits)
-      val fixedColor: Vector3 = attenuated(colorVector)
+      val hitScaler = colorScale / hits
+      var scaledRed = red * hitScaler
+      var scaledGreen = green * hitScaler
+      var scaledBlue = blue * hitScaler
+      val maxColor = max(scaledRed, max(scaledGreen, scaledBlue))
+
+      if (maxColor > 255) {
+        val maxer = 255.0 / maxColor
+        scaledRed *= maxer
+        scaledGreen *= maxer
+        scaledBlue *= maxer
+      } else {
+        val minColor = min(scaledRed, min(scaledGreen, scaledBlue))
+        if (minColor < 0.0) {
+          scaledRed = 0
+          scaledGreen = 0
+          scaledBlue = 0
+        }
+      }
+      val fixedColor = new Color(scaledRed.toInt, scaledGreen.toInt, scaledBlue.toInt)
       graphics.setColor(fixedColor)
       graphics.drawRect(xi, yi, 0, 0)
       true

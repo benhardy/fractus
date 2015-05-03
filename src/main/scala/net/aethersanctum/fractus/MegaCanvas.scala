@@ -35,14 +35,12 @@ class MegaCanvas(width: Int, height: Int,
 
   println("Initializing MegaCanvas " + width + "x" + height)
 
-  private val dots: Array[Array[PaintBucket]] = new Array[Array[PaintBucket]](height)
+  import MegaCanvas._
 
-  for (row <- 0 until height) {
-    dots(row) = new Array[PaintBucket](width)
-    for (col <- 0 until width) {
-      dots(row)(col) = new PaintBucket
-    }
-  }
+  private val red = big2dArrayOfDoubles(width, height)
+  private val green = big2dArrayOfDoubles(width, height)
+  private val blue = big2dArrayOfDoubles(width, height)
+  private val hits = big2dArrayOfDoubles(width, height)
 
   /**
    * is the point suggested by (x,y) actually within the confines of this canvas dimensions?
@@ -54,7 +52,7 @@ class MegaCanvas(width: Int, height: Int,
   /**
    * how many splashes of paint have been added to  the bucket at these coordinates
    */
-  def hits(x: Int, y: Int) = dots(y)(x).hits
+  def hits(x: Int, y: Int) = hits(y)(x)
 
   /**
    * add paint to an individual paint bucket in the array.
@@ -62,12 +60,26 @@ class MegaCanvas(width: Int, height: Int,
    * this is attenuated by intensity to allow addition of partial splashes of paint
    * (for example for anti-aliasing)
    */
-  def paint(x: Int, y: Int, c: Color, intensity: Double) = {
+  def paint(x: Int, y: Int, color: Color, intensity: Double) = {
     if (containsPoint(x, y)) {
-      val bucket = dots(y)(x)
-      bucket.paint(c, intensity)
-      paintObserver.updateDisplayPoint(x, y, bucket)
+      red(y)(x) += color.getRed * intensity
+      green(y)(x) += color.getGreen * intensity
+      blue(y)(x) += color.getBlue * intensity
+      hits(y)(x) += intensity
+      paintObserver.updateDisplayPoint(x, y, red(y)(x), green(y)(x), blue(y)(x), hits(y)(x))
     }
   }
+}
 
+object MegaCanvas {
+  def big2dArrayOfDoubles(width:Int, height:Int) = {
+    val array = new Array[Array[Double]](height)
+    for (row <- 0 until height) {
+      array(row) = new Array[Double](width)
+      for (col <- 0 until width) {
+        array(row)(col) = 0.0
+      }
+    }
+    array
+  }
 }

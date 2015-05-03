@@ -59,7 +59,7 @@ class FractusApp(imageWidth: Int, imageHeight: Int) extends GuiMessageReceiver {
    * Contains a thread which after starting updates the display periodically
    */
   class RefreshTicker extends Runnable {
-    val REFRESH_INTERVAL_MILLIS = 1000
+    val REFRESH_INTERVAL_MILLIS = 10000
     val TOTAL_IMAGE_PIXELS = (imageWidth * imageHeight)
     private val executor =  Executors newScheduledThreadPool 1
     var timer = 0
