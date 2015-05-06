@@ -26,12 +26,12 @@ trait Transform extends (Vector2 => Vector2) {
   def scale(s: Double) = combine(Transform.scale(s))
 
   def rotate(a: Double) = combine(Transform.rotate(a))
-
+/*
   def polar = combine(Transform.polar)
 
   def invertRadius = combine(Transform.invertRadius)
 
-  def sine = combine(Transform.sine)
+  def sine = combine(Transform.sine)*/
 }
 
 /**

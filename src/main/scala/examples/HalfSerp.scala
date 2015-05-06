@@ -9,8 +9,6 @@ import net.aethersanctum.fractus.{PartRandom, Rule, RuleState}
 /**
  * A nice stained glass situation.
  */
-
-
 object HalfSerp extends PartRandom {
   override val name = "halfserp"
 
@@ -19,8 +17,8 @@ object HalfSerp extends PartRandom {
   }
 
   override val rules = Array[Rule](
-    rule.weight(1).color(GREEN).colorWeight(0.5).scale(0.5).translate(1.25, 0),
-    rule.weight(1).color(RED).colorWeight(0.5).scale(0.5).translate(-1.25, 0),
-    rule.weight(1).color(GRAY).colorWeight(0.5).rotate(60)
+    rule weight 1 color GREEN colorWeight 0.5 scale 0.5 translate(1.25, 0),
+    rule weight 1 color RED   colorWeight 0.5 scale 0.5 translate(-1.25, 0),
+    rule weight 1 color GRAY  colorWeight 0.5 rotate 60
   )
 }

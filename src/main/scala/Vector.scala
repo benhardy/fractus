@@ -82,7 +82,7 @@ final class Vector2(a: Double, b: Double) extends Vector[Vector2] {
       }
     }
   }
-  
+
   override def toString = "<%.3f,%.3f>".format(a, b)
 }
 
@@ -173,7 +173,7 @@ object Vector {
 
   def apply(a: Double, b: Double, c: Double) = new Vector3(a, b, c)
 
-  def polar(r: Double, t: Double) = new PolarVector(r, t)
+  def toPolar(r: Double, t: Double) = new PolarVector(r, t)
 
   implicit def tupleToVector2(t: (Double, Double)) = Vector(t._1, t._2)
 
@@ -191,5 +191,5 @@ object Vector {
     Vector(p.r * cos(p.t), p.r * sin(p.t))
   }
 
-  implicit def tupleToPolar(t: (Double, Double)) = polar(t._1, t._2)
+  implicit def tupleToPolar(t: (Double, Double)) = toPolar(t._1, t._2)
 }
