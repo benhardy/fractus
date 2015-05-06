@@ -42,8 +42,10 @@ object FiveSerp extends PartRandom {
   )
 }
 
-object DerpDerp extends PartRandom {
-  override val name = "derpderp"
+object Tendrils extends PartRandom {
+  override val name = "tendrils"
+
+  override val scale = 1.0
 
   override def customTransition(state: RuleState) = {
     val switch: Boolean = random <= 0.5
@@ -51,17 +53,17 @@ object DerpDerp extends PartRandom {
       case (0, true) => 1
       case (0, false) => 2
       case (1, true) => 0
-      case (1, true) => 2
+      case (1, false) => 2
       case (2, true) => 0
-      case (2, true) => 1
+      case (2, false) => 1
       case _ => 0
     }
   }
 
   override val rules = Array[Rule](
-    rule weight 1 color GREEN colorWeight 0.5 scale 0.75 rotate 30 translate(0.5, 0.5),
-    rule weight 1 color BLUE  colorWeight 0.5 translate (-1,-1),
-    rule weight 1 color WHITE colorWeight 0.5 also polar
+    rule weight 1 color GREEN colorWeight 0.5 translate(1,0) scale 0.6 rotate 35 translate(0.5, -1) translate(-1,0),
+    rule weight 1 color RED   colorWeight 0.5 translate(1,0) translate (2,1)                        translate(-1,0),
+    rule weight 1 color WHITE colorWeight 0.5 translate(1,0) also polar translate (-2, 1)           translate(-1,0)
   )
 }
 
