@@ -300,7 +300,8 @@ object Examples extends (String => Option[RuleBasedFractal]) {
     Spongy,
     Starkle,
     SquaresVille,
-    HalfSerp
+    HalfSerp,
+    FiveSerp
   )
 
   val items = examples.map(ex => (ex.name, ex)).toMap
