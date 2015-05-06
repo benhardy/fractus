@@ -300,6 +300,7 @@ object Examples extends (String => Option[RuleBasedFractal]) {
     Spongy,
     Starkle,
     SquaresVille,
+    DerpDerp,
     HalfSerp,
     FiveSerp
   )
