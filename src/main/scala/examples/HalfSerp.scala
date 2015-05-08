@@ -3,7 +3,7 @@ package net.aethersanctum.fractus.examples
 
 import java.awt.Color._
 
-import net.aethersanctum.fractus.{PartRandom, Rule, RuleState}
+import net.aethersanctum.fractus.{Vector2, PartRandom, Rule, RuleState}
 import net.aethersanctum.fractus.Rule._
 import net.aethersanctum.fractus.Transform._
 import math.random
@@ -65,5 +65,47 @@ object Tendrils extends PartRandom {
     rule weight 1 color RED   colorWeight 0.5 translate(1,0) translate (2,1)                        translate(-1,0),
     rule weight 1 color WHITE colorWeight 0.5 translate(1,0) also polar translate (-2, 1)           translate(-1,0)
   )
+}
+
+
+object Tendrils2 extends PartRandom {
+  override val name = "tendrils2"
+
+  override val scale = 1.3
+
+  override val rules = Array[Rule](
+    rule weight 3 color RED colorWeight 0.25 also polar rotate 100,
+    rule weight 1 color WHITE colorWeight 0.8 scale 0.67 rotate -10 translate (-1, -1),
+    rule weight 25 color RED colorWeight 0.0 scale (-1,1)
+  )
+}
+
+object Metalicious extends PartRandom {
+  override val name = "metalicious"
+
+  override def customTransition(state: RuleState) = {
+    val switch: Boolean = random <= 0.5
+    (state.current, switch) match {
+      case (1, true) => 0
+      case (1, false) => 2
+      case (2, true) => 0
+      case (2, false) => 1
+      case (3, true) => 1
+      case (3, false) => 2
+      case _ => NO_CUSTOM
+    }
+  }
+
+  val piSquared = math.Pi * math.Pi
+
+  override val scale = 0.6
+
+  override val rules = Array[Rule](
+    rule weight 3 color RED colorWeight 0.25 also polar also spreadY,
+    rule weight 1 color WHITE colorWeight 0.8 scale 0.67 rotate -10 translate (-1, -1),
+    rule weight 25 color RED colorWeight 0.0 scale (-1,1)
+  )
+
+  def spreadY(v:Vector2) = (v.x,  piSquared / (4*v.y*v.y - piSquared))
 }
 
